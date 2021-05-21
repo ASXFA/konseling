@@ -1,0 +1,120 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Kelola Siswa</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}listGuru">kelola Siswa</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">List Siswa
+                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-siswa" title="Tambah Siswa"><i class="fa fa-plus"></i></button></span>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-siswa" class="display table table-striped table-hover" >
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nomor Induk Siswa</th>
+                                            <th>Nama</th>
+                                            <!-- <th>Jabatan</th> -->
+                                            <th>Jenis Kelamin</th>
+                                            <th>Alamat</th>
+                                            <th>Orangtua Murid</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal-->
+     <div class="modal fade" id="modal-siswa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-siswa">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Induk </label>
+                                    <input type="text" name="induk_siswa" id="induk_siswa" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Nama </label>
+                                    <input type="text" name="nama_siswa" id="nama_siswa" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jenis Kelamin </label>
+                                    <select name="jk_siswa" id="jk_siswa" class="form-control" required>
+                                        <option value="Laki-laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jabatan </label>
+                                    <select name="jabatan_siswa" id="jabatan_siswa" class="form-control" required>
+                                        <option value="3">Siswa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Alamat </label>
+                                    <textarea type="text" name="alamat_siswa" id="alamat_siswa" style="text-decoration: none;" cols="3" rows="2" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Orantua Siswa </label>
+                                    <input type="text" name="ortu_siswa" id="ortu_siswa" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <small id="warning"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- id and operation -->
+                    <input type="text" name="id_siswa" id="id_siswa" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    <input type="text" name="old_induk" id="old_induk" hidden>
+                    <!-- end -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/siswa.js"></script>
+{% endblock %}

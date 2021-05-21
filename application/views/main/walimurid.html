@@ -1,0 +1,98 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Kelola Walimurid</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}listGuru">kelola Walimurid</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">List Walimurid
+                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-walimurid" title="Tambah Walimurid"><i class="fa fa-plus"></i></button></span>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-walimurid" class="display table table-striped table-hover" >
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Walimurid</th>
+                                            <th>Induk Siswa </th>
+                                            <th>Telp Walimurid</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal-->
+     <div class="modal fade" id="modal-walimurid" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-walimurid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Nama Walimurid </label>
+                                    <input type="text" name="nama_walimurid" id="nama_walimurid" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Induk Siswa</label>
+                                    <select name="induk_siswa_walimurid" id="induk_siswa_walimurid" class="form-control" required>
+                                        {% for s in siswa %}
+                                        <option value="{{s.induk_siswa}}">{{s.induk_siswa}} | {{s.nama_siswa}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Telp Walimurid </label>
+                                    <input type="text" name="telp_walimurid" id="telp_walimurid" maxlength="12" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- id and operation -->
+                    <input type="text" name="id_walimurid" id="id_walimurid" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    <!-- end -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/walimurid.js"></script>
+{% endblock %}

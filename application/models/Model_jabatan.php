@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model_akun extends CI_Model {
-    var $table = 'tbl_akun';
+class Model_jabatan extends CI_Model {
+    var $table = 'tbl_jabatan';
     var $select_column = array('id_akun','username_akun','induk_akun','role_akun','status_akun');
     var $order_column = array(null,'id_akun','username_akun','induk_akun','role_akun','status_akun',null);
 
@@ -55,12 +55,12 @@ class Model_akun extends CI_Model {
 
     public function getById($id)
     {
-        $this->db->where('id_users',$id);
+        $this->db->where('id_jabatan',$id);
         $query = $this->db->get($this->table);
         return $query->row();
     }
 
-    public function tambahAkun($data)
+    public function tambahUsers($data)
     {
         $query = $this->db->insert($this->table,$data);
         return $query;
@@ -73,25 +73,10 @@ class Model_akun extends CI_Model {
         return $query;
     }
 
-    public function deleteByInduk($induk)
+    public function deleteUsers($id)
     {
-        $this->db->where('induk_akun',$induk);
+        $this->db->where('id_users',$id);
         $query = $this->db->delete($this->table);
-        return $query;
-    }
-
-    public function setStatus($id,$status)
-    {
-        $data = array('status_akun' => $status);
-        $this->db->where('id_akun',$id);
-        $query = $this->db->update($this->table,$data);
-        return $query;
-    }
-
-    public function resetPass($id,$data)
-    {
-        $this->db->where('id_akun',$id);
-        $query = $this->db->update($this->table,$data);
         return $query;
     }
 

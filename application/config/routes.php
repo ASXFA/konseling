@@ -58,7 +58,13 @@ $route['^(rekomendasi|selengkapnyaObjek|beriUlasan|getUlasan)(/:any)?$'] = 'Fron
 
 // BACKEND
 $route['^(auth|action_login|logout)(/:any)?$'] = 'Auth/$0';
-$route['^(dashboard)(/:any)?$'] = 'Dashboard/$0';
+$route['^(index)(/:any)?$'] = 'Dashboard/$0';
+$route['^(listGuru|guruLists|guruByInduk|doGuru|deleteGuru)(/:any)?$'] = 'Guru/$0';
+$route['^(listSiswa|siswaLists|siswaByInduk|doSiswa|deleteSiswa)(/:any)?$'] = 'Siswa/$0';
+$route['^(listAkun|akunLists|setStatus|resetPass)(/:any)?$'] = 'Akun/$0';
+$route['^(listKelas|kelasLists|kelasById|doKelas|deleteKelas)(/:any)?$'] = 'Kelas/$0';
+$route['^(listJenispelanggaran|jenispelanggaranLists|jenispelanggaranById|doJenispelanggaran|deleteJenispelanggaran)(/:any)?$'] = 'Jenis_pelanggaran/$0';
+$route['^(listWalimurid|walimuridLists|walimuridById|doWalimurid|deleteWalimurid)(/:any)?$'] = 'Walimurid/$0';
 $route['^(ulasanLists|listUlasan)(/:any)?$'] = 'Ulasan/$0';
 $route['^(listUsers|userLists|usersById|gantiStatusUsers|doUsers|deleteUsers|editProfil|cekUsername|aksi_editProfil|editPassword)(/:any)?$'] = 'Users/$0';
 $route['^(listJenis|jenisLists|doJenis|editJenis|deleteJenis|jenisById)(/:any)?$'] = 'Jenis_kriteria/$0';

@@ -14,9 +14,9 @@ class Auth extends CI_Controller {
 
 	public function auth()
 	{
-        // if ($this->isLogin != 0) {
-        //     redirect('dashboard');
-        // }
+        if ($this->session->userdata('isLogin') != 0) {
+            redirect('dashboard');
+        }
 		$this->twig->display('login-page.html',$this->content);
     }
 
@@ -31,17 +31,15 @@ class Auth extends CI_Controller {
             $pass = $this->input->post('pass');
             if (password_verify($pass,$user->password_akun)) {
                 if ($user->status_akun == 1) {
-                    // $session = array(
-                    //     'isLogin' => 1,
-                    //     'id' => $user->id_users,
-                    //     'uname' => $user->uname_users,
-                    //     'nama' => $user->nama_users,
-                    //     'status' => $user->status
-                    // );
-                    // $this->session->set_userdata($session);
+                    $session = array(
+                        'isLogin' => 1,
+                        'induk_user' => $user->induk_akun,
+                        'role_user' => $user->role_akun
+                    );
+                    $this->session->set_userdata($session);
                     $pesan['condition'] = 2;
                     $pesan['pesan'] = "Login Berhasil !";
-                    $pesan['url'] = 'dashboard';
+                    $pesan['url'] = 'index';
                     echo json_encode($pesan);
                     // if ($role == 1) {
                     //     // $this->session->set_flashdata('msgLogin','Halo, Selamat Datang ');

@@ -1,24 +1,24 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model_akun extends CI_Model {
-    var $table = 'tbl_akun';
-    var $select_column = array('id_akun','username_akun','induk_akun','role_akun','status_akun');
-    var $order_column = array(null,'id_akun','username_akun','induk_akun','role_akun','status_akun',null);
+class Model_walimurid extends CI_Model {
+    var $table = 'tbl_walimurid';
+    var $select_column = array('id_walimurid','nama_walimurid','induk_siswa_walimurid','telp_walimurid');
+    var $order_column = array(null,'id_walimurid','nama_walimurid','induk_siswa_walimurid','telp_walimurid',null);
 
     function make_query()
     {
         $this->db->select($this->select_column);
         $this->db->from($this->table);
         if (isset($_POST['search']['value'])) {
-            $this->db->or_like('username_akun',$_POST['search']['value']);
-            $this->db->or_like('induk_akun',$_POST['search']['value']);
-            $this->db->or_like('role_akun',$_POST['search']['value']);
+            $this->db->or_like('nama_walimurid',$_POST['search']['value']);
+            $this->db->or_like('induk_siswa_walimurid',$_POST['search']['value']);
+            $this->db->or_like('telp_walimurid',$_POST['search']['value']);
         }
         if (isset($_POST['order'])) {
             $this->db->order_by($this->order_column[$_POST['order']['0']['column']],$_POST['order']['0']['dir']);
         }else{
-            $this->db->order_by('id_akun','DESC');
+            $this->db->order_by('id_walimurid','DESC');
         }
     }
 
@@ -46,52 +46,30 @@ class Model_akun extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function getByUname($uname)
-    {
-        $this->db->where('username_akun',$uname);
-        $query = $this->db->get($this->table);
-        return $query;
-    }
-
     public function getById($id)
     {
-        $this->db->where('id_users',$id);
+        $this->db->where('id_walimurid',$id);
         $query = $this->db->get($this->table);
         return $query->row();
     }
 
-    public function tambahAkun($data)
+    public function tambahWalimurid($data)
     {
         $query = $this->db->insert($this->table,$data);
         return $query;
     }
 
-    public function editAkun($data,$induk)
+    public function editWalimurid($data,$id)
     {
-        $this->db->where('induk_akun',$induk);
+        $this->db->where('id_walimurid',$id);
         $query = $this->db->update($this->table,$data);
         return $query;
     }
 
-    public function deleteByInduk($induk)
+    public function deleteWalimurid($id)
     {
-        $this->db->where('induk_akun',$induk);
+        $this->db->where('id_walimurid',$id);
         $query = $this->db->delete($this->table);
-        return $query;
-    }
-
-    public function setStatus($id,$status)
-    {
-        $data = array('status_akun' => $status);
-        $this->db->where('id_akun',$id);
-        $query = $this->db->update($this->table,$data);
-        return $query;
-    }
-
-    public function resetPass($id,$data)
-    {
-        $this->db->where('id_akun',$id);
-        $query = $this->db->update($this->table,$data);
         return $query;
     }
 

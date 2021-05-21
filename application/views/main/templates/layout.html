@@ -32,6 +32,7 @@
         {% block content %}{% endblock %}
         {% include "main/templates/footer.html" %}
 		
+		
 		<!-- Custom template | don't include it in your project! -->
 		<!-- <div class="custom-template">
 			<div class="title">Settings</div>
@@ -239,5 +240,7 @@
 			fillColor: 'rgba(255, 165, 52, .14)'
 		});
 	</script>
+	{% block js %}
+	{% endblock %}
 </body>
 </html>
