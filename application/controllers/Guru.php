@@ -23,24 +23,34 @@ class Guru extends CI_Controller {
             $jabatan = $this->model_jabatan->getById($data->jabatan_guru);
             $this->jabatan = $jabatan->nama_jabatan;
             $this->telp = $data->telp_guru;
+            $this->content = array(
+                'base_url'=>base_url(),
+                'id_user' => $this->id,
+                'induk_user_login' => $this->induk,
+                'role_user_login' => $this->role,
+                'nama_user_login' => $this->nama,
+                'jabatan_user_login' => $this->jabatan,
+                'telp_user_login' => $this->telp
+            );
         }else if($this->role == 3){
-            // $this->load->model('model_siswa');
-            // $data = $this->model_siswa->getByInduk($user->induk_akun);
-            // $session = array(
-            //     'isLogin' => 1,
-            //     'id_user' => $data->id_siswa,
-            //     'induk_user' => $data->induk_siswa
-            // );
+            $this->load->model('model_siswa');
+            $data = $this->model_siswa->getByInduk($this->induk);
+            $this->id = $data->id_siswa;
+            $this->nama = $data->nama_siswa;
+            $this->jabatan = 'siswa';
+            // $this->telp = $data->telp_guru;
+            $this->alamat = $data->alamat_siswa;
+            $this->ortu = $data->ortu_siswa;
+            $this->content = array(
+                'base_url'=>base_url(),
+                'id_user' => $this->id,
+                'induk_user_login' => $this->induk,
+                'nama_user_login' => $this->nama,
+                'jabatan_user_login' => $this->jabatan,
+                'alamat_user_login' => $this->alamat,
+                'ortu_user_login' => $this->ortu
+            );
         }
-
-        $this->content = array(
-            'base_url'=>base_url(),
-            'id_user' => $this->id,
-            'induk_user_login' => $this->induk,
-            'nama_user_login' => $this->nama,
-            'jabatan_user_login' => $this->jabatan,
-            'telp_user_login' => $this->telp
-        );
 	}
 
 	public function listGuru()

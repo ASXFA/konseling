@@ -4,7 +4,7 @@
     <div class="content">
         <div class="page-inner">
             <div class="page-header">
-                <h4 class="page-title">Kelola Kelas</h4>
+                <h4 class="page-title">Kelola Sanksi</h4>
                 <ul class="breadcrumbs">
                     <li class="nav-home">
                         <a href="{{base_url}}">
@@ -15,7 +15,7 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{base_url}}listGuru">kelola Kelas</a>
+                        <a href="{{base_url}}listJenispelanggaran">kelola Sanksi</a>
                     </li>
                 </ul>
             </div>
@@ -23,20 +23,18 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">List Kelas
-                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-kelas" title="Tambah Kelas"><i class="fa fa-plus"></i></button></span>
+                            <h4 class="card-title">List Sanksi
+                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-sanksi" title="Tambah Sanksi"><i class="fa fa-plus"></i></button></span>
                             </h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table-kelas" class="display table table-striped table-hover" >
+                                <table id="table-sanksi" class="display table table-striped table-hover" >
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kode Kelas</th>
-                                            <th>Nama kelas</th>
-                                            <th>Keterangan Kelas</th>
-                                            <th>Guru</th>
+                                            <th>Nama Sanksi</th>
+                                            <th>Jumlah Poin Sanksi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -51,42 +49,30 @@
         </div>
     </div>
      <!-- Modal-->
-     <div class="modal fade" id="modal-kelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+     <div class="modal fade" id="modal-sanksi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" id="form-kelas">
+                    <form method="POST" id="form-sanksi">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="" class="form-control-label">Kode Kelas </label>
-                                    <input type="text" name="kode_kelas" id="kode_kelas" class="form-control" required>
+                                    <label for="" class="form-control-label">Nama sanksi </label>
+                                    <input type="text" name="nama_sanksi" id="nama_sanksi" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="form-control-label">Nama Kelas</label>
-                                    <input type="text" name="nama_kelas" id="nama_kelas" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="form-control-label">Keterangan Kelas </label>
-                                    <textarea name="keterangan_kelas" id="keterangan_kelas" cols="3" rows="3" class="form-control" required></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="form-control-label">Guru</label>
-                                    <select name="id_guru_kelas" id="id_guru_kelas" class="form-control" required>
-                                        {% for item in guru %}
-                                        <option value="{{item.id_guru}}">{{item.nama_guru}}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <label for="" class="form-control-label">Jumlah Point Maksimal </label>
+                                    <input type="number" name="jumlah_poin_sanksi" id="jumlah_poin_sanksi" class="form-control" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- id and operation -->
-                    <input type="text" name="id_kelas" id="id_kelas" hidden>
+                    <input type="text" name="id_sanksi" id="id_sanksi" hidden>
                     <input type="text" name="operation" id="operation" hidden>
                     <!-- end -->
                     <div class="modal-footer">
@@ -99,5 +85,5 @@
     </div>
 {% endblock %}
 {% block js %}
-<script src="{{base_url}}assets/action/kelas.js"></script>
+<script src="{{base_url}}assets/action/sanksi.js"></script>
 {% endblock %}

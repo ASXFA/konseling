@@ -38,7 +38,7 @@
                                             <!-- <th>Jabatan</th> -->
                                             <th>Jenis Kelamin</th>
                                             <th>Alamat</th>
-                                            <th>Orangtua Murid</th>
+                                            <th>Kelas</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -92,8 +92,12 @@
                                     <textarea type="text" name="alamat_siswa" id="alamat_siswa" style="text-decoration: none;" cols="3" rows="2" class="form-control" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="form-control-label">Orantua Siswa </label>
-                                    <input type="text" name="ortu_siswa" id="ortu_siswa" class="form-control" required>
+                                    <label for="" class="form-control-label">Kelas </label>
+                                    <select name="id_kelas_siswa" id="id_kelas_siswa" class="form-control" required>
+                                        {% for item in kelas %}
+                                        <option value="{{item.id_kelas}}">{{item.nama_kelas}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12">

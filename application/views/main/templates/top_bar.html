@@ -84,10 +84,11 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                {% if role_user_login == 1 %}
                 <li class="nav-item" id="li-user">
                     <a data-toggle="collapse" href="#base" id="user-page">
-                        <i class="fas fa-users"></i>
-                        <p>Kelola User</p>
+                        <i class="fas fa-list"></i>
+                        <p>Kelola Data</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="base">
@@ -102,33 +103,35 @@
                                     <span class="sub-item">Siswa</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{base_url}}listAkun" id="sub-akun">
+                                    <span class="sub-item">Kelola Akun</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{base_url}}listKelas" id="sub-kelas">
+                                    <span class="sub-item">Kelola Kelas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{base_url}}listWalimurid" id="sub-walimurid">
+                                    <span class="sub-item">Kelola Walimurid</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{base_url}}listJenispelanggaran" id="sub-jenipelanggaran">
+                                    <span class="sub-item">Kelola Jenis Pelanggaran</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{base_url}}listSanksi" id="sub-sanksi">
+                                    <span class="sub-item">Kelola Sanksi</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" id="user-page">
-                    <a href="{{base_url}}listAkun">
-                        <i class="fas fa-id-card"></i>
-                        <p>Kelola Akun</p>
-                    </a>
-                </li>
-                <li class="nav-item" id="user-page">
-                    <a href="{{base_url}}listKelas">
-                        <i class="fas fa-lists"></i>
-                        <p>Kelola Kelas</p>
-                    </a>
-                </li>
-                <li class="nav-item" id="user-page">
-                    <a href="{{base_url}}listJenispelanggaran">
-                        <i class="fas fa-lists"></i>
-                        <p>Kelola Jenis Pelanggaran</p>
-                    </a>
-                </li>
-                <li class="nav-item" id="user-page">
-                    <a href="{{base_url}}listWalimurid">
-                        <i class="fas fa-lists"></i>
-                        <p>Kelola Walimurid</p>
-                    </a>
-                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

@@ -1,26 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model_siswa extends CI_Model {
-    var $table = 'tbl_siswa';
-    var $select_column = array('id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','id_kelas_siswa');
-    var $order_column = array(null,'id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','id_kelas_siswa',null);
+class Model_sanksi extends CI_Model {
+    var $table = 'tbl_sanksi';
+    var $select_column = array('id_sanksi','nama_sanksi','jumlah_poin_sanksi');
+    var $order_column = array(null,'id_sanksi','nama_sanksi','jumlah_poin_sanksi',null);
 
     function make_query()
     {
         $this->db->select($this->select_column);
         $this->db->from($this->table);
         if (isset($_POST['search']['value'])) {
-            $this->db->or_like('induk_siswa',$_POST['search']['value']);
-            $this->db->or_like('nama_siswa',$_POST['search']['value']);
-            $this->db->or_like('alamat_siswa',$_POST['search']['value']);
-            $this->db->or_like('jk_siswa',$_POST['search']['value']);
-            $this->db->or_like('id_kelas_siswa',$_POST['search']['value']);
+            $this->db->or_like('nama_sanksi',$_POST['search']['value']);
+            $this->db->or_like('jumlah_poin_sanksi',$_POST['search']['value']);
         }
         if (isset($_POST['order'])) {
             $this->db->order_by($this->order_column[$_POST['order']['0']['column']],$_POST['order']['0']['dir']);
         }else{
-            $this->db->order_by('id_siswa','DESC');
+            $this->db->order_by('id_sanksi','ASC');
         }
     }
 
@@ -48,41 +45,29 @@ class Model_siswa extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    // public function getByUname($uname)
-    // {
-    //     $this->db->where('username_akun',$uname);
-    //     $query = $this->db->get($this->table);
-    //     return $query;
-    // }
-
-    public function getAll()
+    public function getById($id)
     {
-        return $this->db->get($this->table);
-    }
-
-    public function getByInduk($induk)
-    {
-        $this->db->where('induk_siswa',$induk);
+        $this->db->where('id_sanksi',$id);
         $query = $this->db->get($this->table);
         return $query->row();
     }
 
-    public function tambahSiswa($data)
+    public function tambahSanksi($data)
     {
         $query = $this->db->insert($this->table,$data);
         return $query;
     }
 
-    public function editSiswa($data,$id)
+    public function editSanksi($data,$id)
     {
-        $this->db->where('id_siswa',$id);
+        $this->db->where('id_sanksi',$id);
         $query = $this->db->update($this->table,$data);
         return $query;
     }
 
-    public function deleteSiswa($id)
+    public function deleteSanksi($id)
     {
-        $this->db->where('induk_siswa',$id);
+        $this->db->where('id_sanksi',$id);
         $query = $this->db->delete($this->table);
         return $query;
     }

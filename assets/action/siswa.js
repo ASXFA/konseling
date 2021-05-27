@@ -26,7 +26,7 @@ $(function(){
         $('#jabatan_siswa').val('');
         $('#alamat_siswa').val('');
         $('#jk_siswa').val('');
-        $('#ortu_siswa').val('');
+        $('#id_kelas_siswa').val('');
         $('#id_siswa').val('');
         $('#operation').val('');
         $('#modal-siswa').modal({backdrop:'static',show:true});
@@ -51,7 +51,7 @@ $(function(){
                 $('#jabatan_siswa').val(3);
                 $('#alamat_siswa').val(result.alamat_siswa);
                 $('#jk_siswa').val(result.jk_siswa);
-                $('#ortu_siswa').val(result.ortu_siswa);
+                $('#id_kelas_siswa').val(result.ortu_siswa);
                 $('#id_siswa').val(result.id_siswa);
                 $('#operation').val('edit');
                 $('#warning').html('<i> Mengganti Nomor Induk akan mengganti nomor induk di akun juga ! </i>');
@@ -83,7 +83,7 @@ $(function(){
                     $('#jabatan_siswa').val();
                     $('#alamat_siswa').val();
                     $('#jk_siswa').val();
-                    $('#ortu_siswa').val();
+                    $('#id_kelas_siswa').val();
                     $('#id_siswa').val();
                     $('#operation').val();
                 }else if(data.cond == "0"){

@@ -27,9 +27,10 @@ class Walimurid extends CI_Controller {
                 'base_url'=>base_url(),
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
+                'role_user_login' => $this->role,
                 'nama_user_login' => $this->nama,
                 'jabatan_user_login' => $this->jabatan,
-                'telp_user_login' => $this->telp,
+                'telp_user_login' => $this->telp
             );
         }else if($this->role == 3){
             $this->load->model('model_siswa');
@@ -50,8 +51,6 @@ class Walimurid extends CI_Controller {
                 'ortu_user_login' => $this->ortu
             );
         }
-
-
 	}
 
 	public function listWalimurid()

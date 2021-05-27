@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Jenis_pelanggaran extends CI_Controller {
+class Sanksi extends CI_Controller {
 
 	public function __construct()
 	{
@@ -13,7 +13,7 @@ class Jenis_pelanggaran extends CI_Controller {
         $this->induk = $this->session->userdata('induk_user');
         $this->role = $this->session->userdata('role_user');
         
-        $this->load->model('model_jenis_pelanggaran');
+        $this->load->model('model_sanksi');
         if ($this->role == 1 || $this->role == 3) {
             $this->load->model('model_guru');
             $data = $this->model_guru->getByInduk($this->induk);
@@ -53,74 +53,66 @@ class Jenis_pelanggaran extends CI_Controller {
         }
 	}
 
-	public function listJenispelanggaran()
+	public function listSanksi()
 	{
-		$this->twig->display('main/jenis_pelanggaran.html',$this->content);
+		$this->twig->display('main/sanksi.html',$this->content);
 	}
 
-    public function jenispelanggaranLists()
+    public function sanksiLists()
     {
-        $jenis_pelanggaran = $this->model_jenis_pelanggaran->make_datatables();
+        $sanksi = $this->model_sanksi->make_datatables();
         $data = array();
-        if (!empty($jenis_pelanggaran)) {
+        if (!empty($sanksi)) {
             $no = 1;
-            foreach($jenis_pelanggaran as $row){
+            foreach($sanksi as $row){
                 $sub_data = array();
                 $sub_data[] = $no;
-                $sub_data[] = $row->kode_jenis_pelanggaran;
-                $sub_data[] = $row->nama_jenis_pelanggaran;
-                $sub_data[] = $row->kategori_jenis_pelanggaran;
-                $sub_data[] = $row->poin_jenis_pelanggaran;
-                $sub_data[] = "<button class='btn btn-warning btn-sm mr-2 editJenispelanggaran' id='".$row->id_jenis_pelanggaran."' title='Edit Jenis Pelanggaran'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteJenispelanggaran' id='".$row->id_jenis_pelanggaran."' title='Delete Jenis Pelanggaran'><i class='fa fa-trash'></i></button>";
+                $sub_data[] = $row->nama_sanksi;
+                $sub_data[] = $row->jumlah_poin_sanksi;
+                $sub_data[] = "<button class='btn btn-warning btn-sm mr-2 editSanksi' id='".$row->id_sanksi."' title='Edit Sanksi'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteSanksi' id='".$row->id_sanksi."' title='Delete Sanksi'><i class='fa fa-trash'></i></button>";
                 $data[] = $sub_data;
                 $no++;
             }
         }
         $output = array(
             'draw' => intval($_POST['draw']),
-            'recordsTotal' => $this->model_guru->get_all_data(),
-            'recordsFiltered' => $this->model_guru->get_filtered_data(),
+            'recordsTotal' => $this->model_sanksi->get_all_data(),
+            'recordsFiltered' => $this->model_sanksi->get_filtered_data(),
             'data' => $data
         );
 
         echo json_encode($output);
     }
 
-    public function jenispelanggaranById()
+    public function sanksiById()
     {
-        $id = $this->input->post('id_jenis_pelanggaran');
-        $jenis_pelanggaran = $this->model_jenis_pelanggaran->getById($id);
+        $id = $this->input->post('id_sanksi');
+        $sanksi = $this->model_sanksi->getById($id);
         $output = array(
-            'id_jenis_pelanggaran' => $jenis_pelanggaran->id_jenis_pelanggaran,
-            'kode_jenis_pelanggaran' => $jenis_pelanggaran->kode_jenis_pelanggaran,
-            'nama_jenis_pelanggaran' => $jenis_pelanggaran->nama_jenis_pelanggaran,
-            'kategori_jenis_pelanggaran' => $jenis_pelanggaran->kategori_jenis_pelanggaran,
-            'poin_jenis_pelanggaran' => $jenis_pelanggaran->poin_jenis_pelanggaran
+            'id_sanksi' => $sanksi->id_sanksi,
+            'nama_sanksi' => $sanksi->nama_sanksi,
+            'jumlah_poin_sanksi' => $sanksi->jumlah_poin_sanksi
         );
         echo json_encode($output);
     }
 
-    public function doJenispelanggaran()
+    public function doSanksi()
     {
         $operation = $this->input->post('operation');
         $pesan = array();
-        $id = $this->input->post('id_jenis_pelanggaran');
+        $id = $this->input->post('id_sanksi');
         if ($operation == 'tambah') {
             $data = array(
-                'kode_jenis_pelanggaran' => $this->input->post('kode_jenis_pelanggaran'),
-                'nama_jenis_pelanggaran' => $this->input->post('nama_jenis_pelanggaran'),
-                'kategori_jenis_pelanggaran' => $this->input->post('kategori_jenis_pelanggaran'),
-                'poin_jenis_pelanggaran' => $this->input->post('poin_jenis_pelanggaran')
+                'nama_sanksi' => $this->input->post('nama_sanksi'),
+                'jumlah_poin_sanksi' => $this->input->post('jumlah_poin_sanksi')
             );
-            $process = $this->model_jenis_pelanggaran->tambahJenispelanggaran($data);
+            $process = $this->model_sanksi->tambahSanksi($data);
         }else if($operation == 'edit'){
             $data = array(
-                'kode_jenis_pelanggaran' => $this->input->post('kode_jenis_pelanggaran'),
-                'nama_jenis_pelanggaran' => $this->input->post('nama_jenis_pelanggaran'),
-                'kategori_jenis_pelanggaran' => $this->input->post('kategori_jenis_pelanggaran'),
-                'poin_jenis_pelanggaran' => $this->input->post('poin_jenis_pelanggaran')
+                'nama_sanksi' => $this->input->post('nama_sanksi'),
+                'jumlah_poin_sanksi' => $this->input->post('jumlah_poin_sanksi')
             );
-            $process = $this->model_jenis_pelanggaran->editJenispelanggaran($data,$id);
+            $process = $this->model_sanksi->editSanksi($data,$id);
         }
         if ($process) {
             $pesan['cond'] = '1';
@@ -132,10 +124,10 @@ class Jenis_pelanggaran extends CI_Controller {
         echo json_encode($pesan);
     }
 
-    public function deleteJenispelanggaran()
+    public function deleteSanksi()
     {
-        $id = $this->input->post('id_jenis_pelanggaran');
-        $process = $this->model_jenis_pelanggaran->deleteJenispelanggaran($id);
+        $id = $this->input->post('id_sanksi');
+        $process = $this->model_sanksi->deleteSanksi($id);
         echo json_encode($process);
     }
 }

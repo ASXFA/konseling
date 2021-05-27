@@ -46,12 +46,25 @@ class Model_guru extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function getAll()
+    {
+        $query = $this->db->get($this->table);
+        return $query;
+    }
+
     // public function getByUname($uname)
     // {
     //     $this->db->where('username_akun',$uname);
     //     $query = $this->db->get($this->table);
     //     return $query;
     // }
+
+    public function getById($id)
+    {
+        $this->db->where('id_guru',$id);
+        $query = $this->db->get($this->table);
+        return $query->row();
+    }
 
     public function getByInduk($induk)
     {

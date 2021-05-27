@@ -3,12 +3,12 @@ $(function(){
     // $('#base').attr('class','collapse show');
     // $('#sub-guru').attr('class','active');
 
-    $('#table-kelas').DataTable({
+    $('#table-sanksi').DataTable({
         "processing": true,
         "serverSide": true, 
         "order":[],
         "ajax":{
-            url:"kelasLists",
+            url:"sanksiLists",
             type:"post",
         },
         "columnDefs":[
@@ -19,42 +19,38 @@ $(function(){
         ],
     });
 
-    $('#btn-tambah-kelas').click(function(){
-        $('#kode_kelas').val('');
-        $('#nama_kelas').val('');
-        $('#keterangan_kelas').val('');
-        $('#id_guru_kelas').val('');
-        $('#modal-kelas').modal({backdrop:'static',show:true});
-        $('#exampleModalLabel').html('Tambah Kelas');
+    $('#btn-tambah-sanksi').click(function(){
+        $('#nama_sanksi').val('');
+        $('#jumlah_poin_sanksi').val('');
+        $('#modal-sanksi').modal({backdrop:'static',show:true});
+        $('#exampleModalLabel').html('Tambah Sanksi');
         $('#operation').val('tambah');
         // $('#warning').html('<i> Akun akan otomatis terbuat dengan username dan password sesuai dengan nomor induk !');
     })
 
-    $(document).on('click','.editKelas',function(){
-        var id_kelas = $(this).attr('id');
-        $('#modal-kelas').modal({backdrop:'static',show:true});
-        $('#exampleModalLabel').html('Edit Kelas');
+    $(document).on('click','.editSanksi',function(){
+        var id_sanksi = $(this).attr('id');
+        $('#modal-sanksi').modal({backdrop:'static',show:true});
+        $('#exampleModalLabel').html('Edit Sanksi');
         $.ajax({
             method:'POST',
             dataType:'JSON',
-            data:{id_kelas:id_kelas},
-            url:'kelasById',
+            data:{id_sanksi:id_sanksi},
+            url:'sanksiById',
             success:function(result){
-                $('#kode_kelas').val(result.kode_kelas);
-                $('#nama_kelas').val(result.nama_kelas);
-                $('#keterangan_kelas').val(result.keterangan_kelas);
-                $('#id_guru_kelas').val(result.id_guru_kelas);
-                $('#id_kelas').val(result.id_kelas);
+                $('#nama_sanksi').val(result.nama_sanksi);
+                $('#jumlah_poin_sanksi').val(result.jumlah_poin_sanksi);
+                $('#id_sanksi').val(result.id_sanksi);
                 $('#operation').val('edit');
-                $('#warning').html('<i> Mengganti Nomor Induk akan mengganti nomor induk di akun juga ! </i>');
+                // $('#warning').html('<i> Mengganti Nomor Induk akan mengganti nomor induk di akun juga ! </i>');
             }
         })
     })
 
-    $('#form-kelas').submit(function(e){
+    $('#form-sanksi').submit(function(e){
         e.preventDefault();   
         $.ajax({
-            url: 'doKelas',
+            url: 'doSanksi',
             data: new FormData(this),
             processData: false,
             contentType: false,
@@ -67,13 +63,11 @@ $(function(){
                         buttons: false,
                         timer: 3000,
                     });
-                    $('#modal-kelas').modal('hide');
-                    $('#table-kelas').DataTable().ajax.reload();
-                    $('#kode_kelas').val();
-                    $('#nama_kelas').val();
-                    $('#keterangan_kelas').val();
-                    $('#id_guru_kelas').val();
-                    $('#id_kelas').val();
+                    $('#modal-sanksi').modal('hide');
+                    $('#table-sanksi').DataTable().ajax.reload();
+                    $('#nama_sanksi').val();
+                    $('#jumlah_poin_sanksi').val();
+                    $('#id_sanksi').val();
                     $('#operation').val();
                 }else if(data.cond == "0"){
                     swal("Gagal", {
@@ -86,10 +80,10 @@ $(function(){
         });
     })
 
-    $(document).on('click','.deleteKelas',function(){
+    $(document).on('click','.deleteSanksi',function(){
         swal({
             title: 'Yakin menghapus data ?',
-            text: "Kelas akan terhapus !",
+            text: "Jenis Pelanggaran akan terhapus !",
             icon: 'warning',
             buttons:{
                 cancel: {
@@ -104,19 +98,19 @@ $(function(){
             }
         }).then((willdelete) => {
             if (willdelete) {
-                var id_kelas = $(this).attr('id');
+                var id_sanksi = $(this).attr('id');
                 $.ajax({
                     method:'POST',
                     dataType:'JSON',
-                    data:{id_kelas:id_kelas},
-                    url:'deleteKelas',
+                    data:{id_sanksi:id_sanksi},
+                    url:'deleteSanksi',
                     success:function(result){
                         swal('Berhasil !',{
                             icon:'success',
                             button:false,
                             timer:2000
                         }).then((result)=>{
-                            $('#table-kelas').DataTable().ajax.reload();
+                            $('#table-sanksi').DataTable().ajax.reload();
                         })
                     }
                 })
