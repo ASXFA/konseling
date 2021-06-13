@@ -19,6 +19,7 @@ class Siswa extends CI_Controller {
             $data = $this->model_guru->getByInduk($this->induk);
             $this->id = $data->id_guru;
             $this->nama = $data->nama_guru;
+            $this->foto = $data->foto_guru;
             $this->load->model('model_jabatan');
             $jabatan = $this->model_jabatan->getById($data->jabatan_guru);
             $this->jabatan = $jabatan->nama_jabatan;
@@ -30,7 +31,8 @@ class Siswa extends CI_Controller {
                 'role_user_login' => $this->role,
                 'nama_user_login' => $this->nama,
                 'jabatan_user_login' => $this->jabatan,
-                'telp_user_login' => $this->telp
+                'telp_user_login' => $this->telp,
+                'foto_user_login' => $this->foto
             );
         }else if($this->role == 3){
             $this->load->model('model_siswa');
@@ -46,6 +48,7 @@ class Siswa extends CI_Controller {
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'nama_user_login' => $this->nama,
+                'role_user_login' => $this->role,
                 'jabatan_user_login' => $this->jabatan,
                 'alamat_user_login' => $this->alamat,
                 'ortu_user_login' => $this->ortu
@@ -73,14 +76,14 @@ class Siswa extends CI_Controller {
                 $sub_data[] = $row->induk_siswa;
                 $sub_data[] = $row->nama_siswa;
                 $sub_data[] = $row->jk_siswa;
-                $sub_data[] = $row->alamat_siswa;
                 $kelas = $this->model_kelas->getById($row->id_kelas_siswa);
                 if (!empty($kelas)) {
                     $sub_data[] = $kelas->nama_kelas;
                 }else{
                     $sub_data[] = "Kelas Tidak Ada !";
                 }
-                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 cekAkun' id='".$row->induk_siswa."' title='cek akun'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editSiswa' id='".$row->induk_siswa."' title='Edit Siswa'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteSiswa' id='".$row->induk_siswa."' title='Delete Siswa'><i class='fa fa-trash'></i></button>";
+                $sub_data[] = $row->poin_siswa." Poin";
+                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailSiswa' id='".$row->induk_siswa."' title='Detail Siswa'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editSiswa' id='".$row->induk_siswa."' title='Edit Siswa'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteSiswa' id='".$row->induk_siswa."' title='Delete Siswa'><i class='fa fa-trash'></i></button><button class='btn btn-secondary btn-sm mr-2 resetPoin' id='".$row->induk_siswa."' title='Reset Poin'><i class='fa fa-undo'></i></button>";
                 $data[] = $sub_data;
                 $no++;
             }
@@ -107,6 +110,38 @@ class Siswa extends CI_Controller {
             'jk_siswa' => $siswa->jk_siswa,
             'id_kelas_siswa' => $siswa->id_kelas_siswa
         );
+        echo json_encode($output);
+    }
+
+    public function detailSiswa()
+    {
+        $induk = $this->input->post('induk');
+        $siswa = $this->model_siswa->getByInduk($induk);
+        $this->load->model('model_kelas');
+        $kelas = $this->model_kelas->getById($siswa->id_kelas_siswa);
+        $this->load->model('model_sanksi');
+        $sanksi = $this->model_sanksi->getById($siswa->status_sanksi_siswa);
+        $output = array(
+            'id_siswa' => $siswa->id_siswa,
+            'induk_siswa' => $siswa->induk_siswa,
+            'nama_siswa' => $siswa->nama_siswa,
+            'alamat_siswa' => $siswa->alamat_siswa,
+            'jk_siswa' => $siswa->jk_siswa,
+            'poin_siswa' => $siswa->poin_siswa,
+            'foto_siswa' => $siswa->foto_siswa,
+        );
+        if(!empty($kelas)){
+            $output['nama_kelas'] = $kelas->nama_kelas;
+        }else{
+            $output['nama_kelas'] = "Kelas tidak tersedia !"; 
+        }
+
+        if(!empty($sanksi))
+        {
+            $output['nama_sanksi'] = $sanksi->nama_sanksi;
+        }else{
+            $output['nama_sanksi'] = "Siswa Patuh !";
+        }
         echo json_encode($output);
     }
 
@@ -162,5 +197,23 @@ class Siswa extends CI_Controller {
         $this->load->model('model_akun');
         $process2 = $this->model_akun->deleteByInduk($induk);
         echo json_encode($process2);
+    }
+
+    public function resetPoin()
+    {
+        $induk = $this->input->post('induk');
+        $data = array('poin_siswa'=>0);
+        $process = $this->model_siswa->editByIndukSiswa($data,$induk);
+        echo json_encode($process);
+    }
+
+    public function resetAllPoin()
+    {
+        $data = array('poin_siswa'=>0);
+        $siswa = $this->model_siswa->getAll()->result();
+        foreach($siswa as $s){
+            $this->model_siswa->editSiswa($data,$s->id_siswa);
+        }
+        echo json_encode($output=array('cond'=>'1'));
     }
 }

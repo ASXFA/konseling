@@ -19,6 +19,7 @@ class Jenis_pelanggaran extends CI_Controller {
             $data = $this->model_guru->getByInduk($this->induk);
             $this->id = $data->id_guru;
             $this->nama = $data->nama_guru;
+            $this->foto = $data->foto_guru;
             $this->load->model('model_jabatan');
             $jabatan = $this->model_jabatan->getById($data->jabatan_guru);
             $this->jabatan = $jabatan->nama_jabatan;
@@ -30,7 +31,8 @@ class Jenis_pelanggaran extends CI_Controller {
                 'role_user_login' => $this->role,
                 'nama_user_login' => $this->nama,
                 'jabatan_user_login' => $this->jabatan,
-                'telp_user_login' => $this->telp
+                'telp_user_login' => $this->telp,
+                'foto_user_login' => $this->foto
             );
         }else if($this->role == 3){
             $this->load->model('model_siswa');
@@ -46,6 +48,7 @@ class Jenis_pelanggaran extends CI_Controller {
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'nama_user_login' => $this->nama,
+                'role_user_login' => $this->role,
                 'jabatan_user_login' => $this->jabatan,
                 'alamat_user_login' => $this->alamat,
                 'ortu_user_login' => $this->ortu
@@ -57,6 +60,28 @@ class Jenis_pelanggaran extends CI_Controller {
 	{
 		$this->twig->display('main/jenis_pelanggaran.html',$this->content);
 	}
+
+    public function getKode()
+    {
+        $output = array();
+        $cek = $this->model_jenis_pelanggaran->cekkode();
+        if (!empty($cek)) {
+            $nourut = substr($cek, 4, 4);
+            $berikutnya = $nourut+1;
+            if ($berikutnya < 10) {
+                $output['kode'] = "JPBK000".strval($berikutnya);
+            }else if($berikutnya > 9){
+                $output['kode'] = "JPBK00".strval($berikutnya);
+            }else if($berikutnya > 99){
+                $output['kode'] = "JPBK0".strval($berikutnya);
+            }else{
+                $output['kode'] = "JPBK".strval($berikutnya);
+            }
+        }else{
+            $output['kode'] = "JPBK0001";
+        }
+        echo json_encode($output);
+    }
 
     public function jenispelanggaranLists()
     {
@@ -130,6 +155,20 @@ class Jenis_pelanggaran extends CI_Controller {
             $pesan['msg'] = 'Gagal !';
         }
         echo json_encode($pesan);
+    }
+
+    public function jenispelanggaranByKode()
+    {
+        $kode = $this->input->post('kode_pel');
+        $jenis_pelanggaran = $this->model_jenis_pelanggaran->getByKode($kode);
+        $output = array(
+            'id_jenis_pelanggaran' => $jenis_pelanggaran->id_jenis_pelanggaran,
+            'kode_jenis_pelanggaran' => $jenis_pelanggaran->kode_jenis_pelanggaran,
+            'nama_jenis_pelanggaran' => $jenis_pelanggaran->nama_jenis_pelanggaran,
+            'kategori_jenis_pelanggaran' => $jenis_pelanggaran->kategori_jenis_pelanggaran,
+            'poin_jenis_pelanggaran' => $jenis_pelanggaran->poin_jenis_pelanggaran
+        );
+        echo json_encode($output);
     }
 
     public function deleteJenispelanggaran()

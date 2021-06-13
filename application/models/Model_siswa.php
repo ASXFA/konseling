@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Model_siswa extends CI_Model {
     var $table = 'tbl_siswa';
-    var $select_column = array('id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','id_kelas_siswa');
-    var $order_column = array(null,'id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','id_kelas_siswa',null);
+    var $select_column = array('id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa');
+    var $order_column = array(null,'id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa',null);
 
     function make_query()
     {
@@ -76,6 +76,13 @@ class Model_siswa extends CI_Model {
     public function editSiswa($data,$id)
     {
         $this->db->where('id_siswa',$id);
+        $query = $this->db->update($this->table,$data);
+        return $query;
+    }
+
+    public function editByIndukSiswa($data,$id)
+    {
+        $this->db->where('induk_siswa',$id);
         $query = $this->db->update($this->table,$data);
         return $query;
     }

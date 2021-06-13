@@ -19,6 +19,7 @@ class Akun extends CI_Controller {
             $data = $this->model_guru->getByInduk($this->induk);
             $this->id = $data->id_guru;
             $this->nama = $data->nama_guru;
+            $this->foto = $data->foto_guru;
             $this->load->model('model_jabatan');
             $jabatan = $this->model_jabatan->getById($data->jabatan_guru);
             $this->jabatan = $jabatan->nama_jabatan;
@@ -30,7 +31,8 @@ class Akun extends CI_Controller {
                 'role_user_login' => $this->role,
                 'nama_user_login' => $this->nama,
                 'jabatan_user_login' => $this->jabatan,
-                'telp_user_login' => $this->telp
+                'telp_user_login' => $this->telp,
+                'foto_user_login' => $this->foto
             );
         }else if($this->role == 3){
             $this->load->model('model_siswa');
@@ -46,6 +48,7 @@ class Akun extends CI_Controller {
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'nama_user_login' => $this->nama,
+                'role_user_login' => $this->role,
                 'jabatan_user_login' => $this->jabatan,
                 'alamat_user_login' => $this->alamat,
                 'ortu_user_login' => $this->ortu
@@ -126,4 +129,21 @@ class Akun extends CI_Controller {
         echo json_encode($pesan);
     }
 
+    public function gantiPass()
+    {
+        $induk = $this->input->post('induk_user');
+        $akun = $this->model_akun->getByInduk($induk);
+        $old_pass = $this->input->post('old_pass');
+        if (password_verify($old_pass,$akun->password_akun)) {
+            $new_pass = $this->input->post('new_pass');
+            $data = array('password_akun'=>password_hash($new_pass,PASSWORD_DEFAULT));
+            $process = $this->model_akun->editAkun($data,$induk);
+            if ($process) {
+                $output = array('cond'=>'1');
+            }
+        }else{
+            $output = array('cond'=>'0','pesan'=>'Password Lama anda salah !');
+        }
+        echo json_encode($output);
+    }
 }

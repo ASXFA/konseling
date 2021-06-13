@@ -24,7 +24,10 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">List Siswa
-                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-siswa" title="Tambah Siswa"><i class="fa fa-plus"></i></button></span>
+                                <span class="float-right">
+                                    <button class="btn btn-primary btn-sm" id="btn-tambah-siswa" title="Tambah Siswa"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-secondary btn-sm" id="btn-reset-all-poin" title="Reset Semua Poin Siswa"><i class="fa fa-undo"></i></button>
+                                </span>
                             </h4>
                         </div>
                         <div class="card-body">
@@ -37,8 +40,8 @@
                                             <th>Nama</th>
                                             <!-- <th>Jabatan</th> -->
                                             <th>Jenis Kelamin</th>
-                                            <th>Alamat</th>
                                             <th>Kelas</th>
+                                            <th>Poin</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -118,7 +121,31 @@
             </div>
         </div>
     </div>
+     <!-- Modal-->
+     <div class="modal fade bd-example-modal-lg" id="modal-detail-siswa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabelDetail"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="table-detail-siswa"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
+<script>
+    var base_url = "{{base_url}}";
+</script>
 <script src="{{base_url}}assets/action/siswa.js"></script>
 {% endblock %}

@@ -122,21 +122,141 @@ $(function(){
                     data:{induk:induk},
                     url:'deleteSiswa',
                     success:function(result){
-                        swal({
-                            icon: 'success',
-                            title: 'Berhasil dihapus !',
-                            timer:3000,
-                        }).then((results) => {
-                            /* Read more about handling dismissals below */
-                            if (results.dismiss === Swal.DismissReason.timer) {
-                                $('#table-siswa').DataTable().ajax.reload();
-                            }else if(results.isConfirmed){
-                                $('#table-siswa').DataTable().ajax.reload();
-                            }
+                        swal('Berhasil !',{
+                            icon:'success',
+                            button:false,
+                            timer:2000
+                        }).then((result)=>{
+                            $('#table-siswa').DataTable().ajax.reload();
                         })
                     }
                 })
             }
         })
     })
+    $(document).on('click','.resetPoin',function(){
+        swal({
+            title: 'Yakin Reset Poin Siswa ?',
+            text: "Poin akan kembali menjadi 0 !",
+            icon: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Tidak, cancel!',
+                    className: 'btn btn-danger'
+                },        			
+                confirm: {
+                    text : 'Ya, Reset!',
+                    className : 'btn btn-success'
+                }
+            }
+        }).then((willreset) => {
+            if (willreset) {
+                var induk = $(this).attr('id');
+                $.ajax({
+                    method:'POST',
+                    dataType:'JSON',
+                    data:{induk:induk},
+                    url:'resetPoin',
+                    success:function(result){
+                        swal('Berhasil !',{
+                            icon:'success',
+                            button:false,
+                            timer:2000
+                        }).then((result)=>{
+                            $('#table-siswa').DataTable().ajax.reload();
+                        })
+                    }
+                })
+            }
+        })
+    })
+    $(document).on('click','.detailSiswa',function(){
+        var induk = $(this).attr('id');
+        $('#modal-detail-siswa').modal({backdrop:'static',show:true});
+        $('#exampleModalLabelDetail').html('Detail Siswa');
+        $.ajax({
+            method:'POST',
+            dataType:'JSON',
+            data:{induk:induk},
+            url:'detailSiswa',
+            success:function(result){
+                var html = "";
+                html +="<table class='table table-borderd'>";
+                html += "<tr>";
+                html += "<td rowspan='8'><img class='img-thumbnail' src='"+base_url+"assets/img-profil/siswa/"+result.foto_siswa+"'></td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Induk Siswa </td>";
+                html += "<td>"+result.induk_siswa+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Nama Siswa </td>";
+                html += "<td>"+result.nama_siswa+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Jenis Kelamin</td>";
+                html += "<td>"+result.jk_siswa+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Alamat  </td>";
+                html += "<td>"+result.alamat_siswa+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Kelas </td>";
+                html += "<td>"+result.nama_kelas+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Poin Siswa </td>";
+                html += "<td>"+result.poin_siswa+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Status Sanksi </td>";
+                html += "<td>"+result.nama_sanksi+"</td>";
+                html += "</tr>";
+                html += "</table>";
+
+                $('#table-detail-siswa').html(html);
+            }
+        })
+    })
+
+    $('#btn-reset-all-poin').click(function(){
+        swal({
+            title: 'Yakin Reset Semua Poin Siswa ?',
+            text: "Poin akan kembali menjadi 0 pada semua siswa!",
+            icon: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Tidak, cancel!',
+                    className: 'btn btn-danger'
+                },        			
+                confirm: {
+                    text : 'Ya, Reset!',
+                    className : 'btn btn-success'
+                }
+            }
+        }).then((willreset) => {
+            if (willreset) {
+                var ops = "reset";
+                $.ajax({
+                    method:'POST',
+                    dataType:'JSON',
+                    data:{ops:ops},
+                    url:'resetAllPoin',
+                    success:function(result){
+                        swal('Berhasil !',{
+                            icon:'success',
+                            button:false,
+                            timer:2000
+                        }).then((result)=>{
+                            $('#table-siswa').DataTable().ajax.reload();
+                        })
+                    }
+                })
+            }
+        })
+    })
+
 })

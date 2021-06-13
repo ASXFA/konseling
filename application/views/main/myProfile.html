@@ -1,0 +1,181 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Profil Saya</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}myProfile">Profil Saya</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2>Profil Saya</h2>
+                                    <form method="post" id="editFoto">
+                                        <div class="imgWrap">
+                                            {% if role_user_login != 3 %}
+                                            <img src="{{base_url}}assets/img-profil/guru/{{foto_user_login}}" id="imgView" style="width:200px !important;" class="card-img-top img-thumbnail">
+                                            {% else %}
+                                            <img src="{{base_url}}assets/img-profil/siswa/{{foto_user_login}}" id="imgView" width="10px" class="card-img-top img-thumbnail">
+                                            {% endif %}
+                                        </div>
+                                        <div class="custom-file mt-2">
+                                            <input type="file" id="inputFile" name="inputFile" class="imgFile custom-file-input" aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="inputFile">{{foto_user_login}}</label>
+                                        </div>
+                                        <small><i>* File yang bisa digunakan hanya jpg, png dan gif </i></small>
+                                        <br>
+                                        <input type="text" name="induk_user_foto" id="induk_user_foto" value="{{induk_user}}" hidden>
+                                        <button class="btn btn-primary btn-sm float-right" type="submit">Save Foto</button>
+                                    </form>
+                                    
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Induk </b></td>
+                                            <td style="border:0px !important;">{{induk_user}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Nama </b></td>
+                                            <td style="border:0px !important;">{{nama_user}}</td>
+                                        </tr>
+                                        {% if role_user_login != 3 %}
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Jabatan </b></td>
+                                            <td style="border:0px !important;">{{jabatan_user}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Telepon </b></td>
+                                            <td style="border:0px !important;">{{telp_user}}</td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Jenis Kelamin </b></td>
+                                            <td style="border:0px !important;">{{jk_user}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Alamat </b></td>
+                                            <td style="border:0px !important;">{{alamat_user}}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td style="border:0px !important;"><b>Username </b></td>
+                                            <td style="border:0px !important;">{{username_user}}</td>
+                                        </tr>
+                                    </table>
+                                    <button class="btn btn-primary btn-sm" type="button" id="editProfil">Edit Profil</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <h2>Ganti Password</h2>
+                                    <form action="" id="gantiPass">
+                                        <div class="form-group">
+                                            <div class="input-icon">
+                                                <input type="password" class="form-control" name="old_pass" id="old_pass" placeholder="Password Lama*" required>
+                                                <span class="input-icon-addon">
+                                                    <a href="javascript:void(0)" style="color:slategray" id="btn-old-pass"><i class="fa fa-eye-slash"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-icon">
+                                                <input type="password" class="form-control" name="new_pass" id="new_pass" placeholder="Password Baru*" required>
+                                                <span class="input-icon-addon">
+                                                    <a href="javascript:void(0)" style="color:slategray" id="btn-new-pass"><i class="fa fa-eye-slash"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-icon">
+                                                <input type="password" class="form-control" name="conf_pass" id="conf_pass" placeholder="Konfirmasi Password*" required>
+                                                <span class="input-icon-addon">
+                                                    <a href="javascript:void(0)" style="color:slategray" id="btn-conf-pass"><i class="fa fa-eye-slash"></i></a>
+                                                </span>
+                                            </div>
+                                            <small id="small-text" class="form-text"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="induk_user" value="{{induk_user}}" hidden>
+                                            <button class="btn btn-primary btn-sm float-right" type="submit">Ganti Password</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal-->
+     <div class="modal fade" id="modal-edit-profil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-edit-profil">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Nama </label>
+                                    <input type="text" name="nama_user_edit" id="nama_user_edit" class="form-control" required>
+                                </div>
+                                {% if role_user_login != 3 %}
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Telepon </label>
+                                    <input type="text" name="telp_user_edit" id="telp_user_edit" class="form-control" required>
+                                </div>
+                                {% endif %}
+                                {% if role_user_login == 3 %}
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jenis Kelamin </label>
+                                    <select name="jk_user_edit" id="jk_user_edit" class="form-control" required>
+                                        <option value="Laki-laki"> Laki-laki</option>
+                                        <option value="Perempuan"> Perempuan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Alamat</label>
+                                    <textarea cols="3" rows="3" name="alamat_user_edit" id="alamat_user_edit" class="form-control" required>
+                                </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Username </label>
+                                    <input type="text" name="username_user_edit" id="username_user_edit" class="form-control" value="{{username_user}}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- id and operation -->
+                    <input type="text" name="role_user" id="role_user" value="{{role_user_login}}" hidden>
+                    <input type="text" name="induk_user_edit" id="induk_user_edit" value="{{induk_user}}" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    <!-- end -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/myProfile.js"></script>
+{% endblock %}

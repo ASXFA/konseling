@@ -47,9 +47,29 @@ class Model_jenis_pelanggaran extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function getAll()
+    {
+        $query = $this->db->get($this->table);
+        return $query;
+    }
+
     public function getById($id)
     {
         $this->db->where('id_jenis_pelanggaran',$id);
+        $query = $this->db->get($this->table);
+        return $query->row();
+    }
+
+    public function cekkode()
+    {
+        $query = $this->db->query("SELECT MAX(kode_jenis_pelanggaran) as kode_jenis_pelanggaran from tbl_jenis_pelanggaran");
+        $hasil = $query->row();
+        return $hasil->kode_jenis_pelanggaran;
+    }
+
+    public function getByKode($kode)
+    {
+        $this->db->where('kode_jenis_pelanggaran',$kode);
         $query = $this->db->get($this->table);
         return $query->row();
     }

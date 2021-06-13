@@ -85,6 +85,13 @@ class Model_guru extends CI_Model {
         $query = $this->db->update($this->table,$data);
         return $query;
     }
+    
+    public function editGuruByInduk($data,$induk)
+    {
+        $this->db->where('induk_guru',$induk);
+        $query = $this->db->update($this->table,$data);
+        return $query;
+    }
 
     public function deleteGuru($induk)
     {

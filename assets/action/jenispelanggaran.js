@@ -20,7 +20,14 @@ $(function(){
     });
 
     $('#btn-tambah-jenispelanggaran').click(function(){
-        $('#kode_jenis_pelanggaran').val('');
+        $.ajax({
+            method:'POST',
+            dataType:'JSON',
+            url:'getKode',
+            success:function(result){
+                $('#kode_jenis_pelanggaran').val(result.kode);
+            }
+        })
         $('#nama_jenis_pelanggaran').val('');
         $('#kategori_jenis_pelanggaran').val('');
         $('#poin_jenis_pelanggaran').val('');

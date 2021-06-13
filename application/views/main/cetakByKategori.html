@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+    /* *{
+        font-size: 12px;
+    } */
+
+    body {
+        margin:0;
+    }
+
+	.table1 {
+        width: 100%;
+        height: 100%;
+        font-family: sans-serif;
+        color: black;
+        border: 1px solid black;
+        border-spacing: 0px;
+        /* border-style: solid; */
+        /* border-collapse: collapse; */
+        margin-bottom: 5px;
+        font-size: 2px !important;
+    }
+
+    .container {
+        padding: 1em 1em 1em 1em;
+    }
+
+    .table-borderless{
+        /* width: 100%; */
+        height: 100%;
+        font-family: 'Times New Roman', Times, serif;
+        border-collapse: collapse;   
+        margin-bottom: 10px;
+        padding: 2em 2em !important;
+    }
+
+    .table1 tr td{
+        border: 1px solid !important;
+    }
+
+    .table-borderless2{
+        width: 100%;
+        height: 100%;
+        font-family: 'Times New Roman', Times, serif;
+        border-collapse: collapse;   
+        margin-bottom: 10px;
+    }
+
+    .f-12{
+        font-size: 12px;
+    }
+
+    .table-borderless, th, td {
+        padding: 3px 5px;
+        font-size: 12px;
+    }
+    
+    .table1 th, .table1 td {
+        border: 1px solid black;
+        padding: 3px 5px;
+    }
+
+    .padding-top{
+        padding-top: 2px;
+    }
+
+    .padding-left-15{
+        padding-left: 15px;
+    }
+    .padding-right-15{
+        padding-right: 15px;
+    }
+
+    .margin-top{
+        margin-top: 5px;
+    }
+
+    .text-center{
+        text-align: center;
+    }
+    .text-left{
+        text-align: left;
+    }
+    .text-right{
+        text-align:right;
+    }
+
+    .font-weight-normal{
+        font-weight: normal;
+    }
+
+    .allPadd{
+        padding: 5px;
+    }
+    </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
+    <title>Laporan Catatan Kasus</title>
+</head>
+    <body>
+        <page>
+            <!-- <img src="{{base_url}}assets/img/kopsurat.png" width="100%" alt=""> -->
+            <div class="container">
+                <table class="table-borderless2">
+                    <tr>
+                        <td><img src="{{base_url}}assets/img/logo-kemendikbud.png" style="padding-right: 30px;" width="17%" alt="logo-kemendikbud"></td>
+                        <td class="text-center">
+                            <h1>SMK NEGERI 3 BANDUNG</h1>
+                            <h3>Jalan Solontongan No.10 Kel. Turangga Kec. Lengkong</h3>
+                            <h3> Bandung, Jawa Barat, 40264</h3>
+                            <h3>Telepon : (022) 7305529</h3>
+                            <h3>Email : admin@smkn3bandung@gmail.com</h3>
+                        </td>
+                        <td><img src="{{base_url}}assets/img/logo-smkn-3.png" style="padding-left: 30px;" width="21%" alt="logo-kemendikbud"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <hr style="height: 3px; color:black;">
+                            <hr style="height: 5px; color:black; margin-top:-9px; width: 99.7%; ">
+                        </td>
+                    </tr>
+                </table>
+                <h3 class="text-center" style="margin-top:-10px;">
+                    <b>
+                        <u>
+                            LAPORAN CATATAN KASUS
+                            {% if nama_bulan != "semua" %}
+                            {{nama_bulan}}
+                            {% endif %}
+                            {% if tahun != "semua" %}
+                            {{tahun}}
+                            {% endif %}
+                        </u>
+                    </b>
+                </h3>
+                <table class="table1">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Induk Siswa</th>
+                            <th>Nama Siswa</th>
+                            <th>Poin Keseluruhan</th>
+                            <th>Nama Jenis Pelanggaran</th>
+                            <th>Poin Jenis Pelanggaran</th>
+                            <th>Keterangan</th>
+                            <th>Penyelesaian Masalah</th>
+                            <th>Evaluasi Masalah</th>
+                            <th>Tanggal Pemanggilan</th>
+                            <th>Pihak yang Terlibat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if catatan is empty %}
+                        <tr>
+                            <td colspan="11" class="text-center">Data Tidak Tersedia</td>
+                        </tr>
+                        {% else %}
+                        {% set count = 1 %}
+                        {% for c in catatan %}
+                        <tr>
+                            {% for p in pelanggaran %}
+                            {% if c.id_pelanggaran_catatan_kasus == p.id_pelanggaran %}
+                            {% for s in siswa %}
+                            {% if p.induk_siswa_pelanggaran == s.induk_siswa %}
+                            <td>{{count}}</td>
+                            <td>{{s.induk_siswa}}</td>
+                            <td>{{s.nama_siswa}}</td>
+                            <td>{{s.poin_siswa}} Poin</td>
+                            {% endif %}
+                            {% endfor %}
+                            {% for jepel in jp %}
+                            {% if jepel.kode_jenis_pelanggaran == p.kode_jenis_pel_pelanggaran %}
+                            <td>{{jepel.nama_jenis_pelanggaran}}</td>
+                            <td>{{jepel.poin_jenis_pelanggaran}} Poin</td>
+                            {% endif %}
+                            {% endfor %}
+                            <td>{{p.keterangan_pelanggaran}}</td>
+                            <td>{{c.penyelesaian_catatan_kasus}}</td>
+                            <td>{{c.evaluasi_catatan_kasus}}</td>
+                            <td>{{c.tanggal_catatan_kasus|date("d F Y")}}</td>
+                            <td>{{c.pihak_catatan_kasus}}</td>
+                            {% set count = count + 1 %}
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+                <!-- <p class="f-12 margin-top">
+                    <b>
+                        Maka dari itu pihak Sekolah bagian Bimbingan Konseling (BK) telah memanggil saudara/i dan mendapatkan hasil sebagai berikut : 
+                    </b>
+                </p>
+                <table class="table1">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                        <th>Penyelesaian Masalah</th>
+                        <th>Evaluasi Masalah</th>
+                        <th>Tanggal Pemanggilan</th>
+                        <th>Pihak yang Terlibat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table> -->
+                <br>
+                <table class="table-borderless2">
+                    <tr>
+                        <td></td>
+                        <td class="text-right">Bandung, {{ "now"|date("d F Y") }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 65px ;">Wali Kelas</td>
+                        <td class="text-right" style="padding-right: 70px;">Guru Bk</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>(.................................................)</td>
+                        <td class="text-right">(.................................................)</td>
+                    </tr>
+                </table>
+            </div>
+        </page>
+    </body>
+</html>

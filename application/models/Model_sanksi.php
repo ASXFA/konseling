@@ -45,6 +45,11 @@ class Model_sanksi extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function getAll()
+    {
+        return $this->db->get($this->table)->result();
+    }
+
     public function getById($id)
     {
         $this->db->where('id_sanksi',$id);

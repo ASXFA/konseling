@@ -1,0 +1,232 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Kelola Catatan Kasus</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}listCatatan">kelola Catatan Kasus</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">List Catatan Kasus
+                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-catatan" title="Tambah Catatan Kasus"><i class="fa fa-plus"></i></button></span>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-catatan" class="display table table-striped table-hover" >
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Pelanggaran</th>
+                                            <th>Penyelesaian / Tindakan</th>
+                                            <th>Evaluasi</th>
+                                            <th>Tanggal</th>
+                                            <th>Pihak Terlibat</th>
+                                            <th width="18%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                Print Berdasarkan Kategori
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{base_url}}cetakByKategori" target="_blank" method="POST">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="form-control-label">Siswa</label>
+                                            <select class="form-control select2-single" name="induk_siswa_print" id="induk_siswa_print" required>
+                                                <option value="0">Semua</option>
+                                                {% for s in siswa %}
+                                                <option value="{{s.induk_siswa}}">{{s.induk_siswa}} | {{s.nama_siswa}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="form-control-label">Bulan</label>
+                                            <select name="bulan" id="bulan" class="form-control select2-single" style="border-color: #ccc !important;" required>
+                                                <option value="0">Semua</option>
+                                                <option value="01">Januari</option>
+                                                <option value="02">Februari</option>
+                                                <option value="03">Maret</option>
+                                                <option value="04">April</option>
+                                                <option value="05">Mei</option>
+                                                <option value="06">Juni</option>
+                                                <option value="07">Juli</option>
+                                                <option value="08">Agustus</option>
+                                                <option value="09">September</option>
+                                                <option value="10">Oktober</option>
+                                                <option value="11">November</option>
+                                                <option value="12">Desember</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="form-control-label">Tahun</label>
+                                            <select name="tahun" id="tahun" class="form-control select2-single" required>
+                                                <option value="0">Semua</option>
+                                                {% for i in range(2019,2050) %}
+                                                <option value="{{i}}">{{i}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="form-control-label text-white" >button</label><br>
+                                            <button class="btn btn-primary btn-sm" type="submit">Generate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal-->
+     <div class="modal fade" id="modal-catatan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-catatan">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">List Pelanggaran </label>
+                                    <select name="id_pelanggaran_catatan_kasus" id="id_pelanggaran_catatan_kasus" class="form-control" required>
+                                        <option hidden>PILIH PELANGGARAN</option>
+                                    {% for pel in pelanggaran %}
+                                    {% if pel.status_pelanggaran == 1 %}
+                                    <option value="{{pel.id_pelanggaran}}" hidden>{{pel.kode_pelanggaran}}</option>
+                                    {% else %}
+                                    <option value="{{pel.id_pelanggaran}}">{{pel.kode_pelanggaran}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Induk Siswa</label>
+                                    <input type="text" name="induk_siswa" id="induk_siswa" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jenis Pelanggaran</label>
+                                    <input type="text" name="jenis_pelanggaran" id="jenis_pelanggaran" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Tanggal Input Pelanggaran</label>
+                                    <input type="text" name="tanggal_pelanggaran" id="tanggal_pelanggaran" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Nama Siswa</label>
+                                    <input type="text" name="nama_siswa" id="nama_siswa" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Poin Pelanggaran</label>
+                                    <input type="text" name="poin_pelanggaran" id="poin_pelanggaran" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Keterangan Pelanggaran</label>
+                                    <textarea cols="3" rows="3" name="keterangan_pelanggaran" style="text-decoration: none;" id="keterangan_pelanggaran" class="form-control" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Penyelesaian Kasus</label>
+                                    <textarea name="penyelesaian_catatan_kasus" id="penyelesaian_catatan_kasus" style="text-decoration: none;" cols="3" rows="3" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Tanggal Catatan Kasus</label>
+                                    <input type="date" name="tanggal_catatan_kasus" id="tanggal_catatan_kasus" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Evaluasi Kasus</label>
+                                    <textarea name="evaluasi_catatan_kasus" id="evaluasi_catatan_kasus" style="text-decoration: none;" cols="3" rows="3" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Pihak yang terlibat</label>
+                                    <input type="text" name="pihak_catatan_kasus" id="pihak_catatan_kasus" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <small id="text-info-catatan"><i>*Bila anda salah memasukan pelanggaran, silahkan delete catatan kasus ini untuk memunculkan kode pelanggaran ini kembali di list pelanggaran dan ulangi kembali proses tambah catatan kasus </i></small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- id and operation -->
+                    <input type="text" name="id_catatan_kasus" id="id_catatan_kasus" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    <!-- end -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal-->
+    <div class="modal fade bd-example-modal-lg" id="modal-detail-catatan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabelDetail"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="table-detail-catatan"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>      
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/catatan.js"></script>
+{% endblock %}

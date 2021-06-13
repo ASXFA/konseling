@@ -53,12 +53,19 @@ class Model_akun extends CI_Model {
         return $query;
     }
 
-    public function getById($id)
+    public function getByInduk($induk)
     {
-        $this->db->where('id_users',$id);
+        $this->db->where('induk_akun',$induk);
         $query = $this->db->get($this->table);
         return $query->row();
     }
+
+    // public function getById($id)
+    // {
+    //     $this->db->where('id_users',$id);
+    //     $query = $this->db->get($this->table);
+    //     return $query->row();
+    // }
 
     public function tambahAkun($data)
     {

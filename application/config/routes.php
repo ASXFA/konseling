@@ -57,21 +57,16 @@ $route['translate_uri_dashes'] = FALSE;
 $route['^(rekomendasi|selengkapnyaObjek|beriUlasan|getUlasan)(/:any)?$'] = 'Frontend/$0';
 
 // BACKEND
+$route['^(myProfile|editProfil|editFoto)(:any)?$'] = "Dashboard/$0";
 $route['^(auth|action_login|logout)(/:any)?$'] = 'Auth/$0';
 $route['^(index)(/:any)?$'] = 'Dashboard/$0';
 $route['^(listGuru|guruLists|guruByInduk|doGuru|deleteGuru)(/:any)?$'] = 'Guru/$0';
-$route['^(listSiswa|siswaLists|siswaByInduk|doSiswa|deleteSiswa)(/:any)?$'] = 'Siswa/$0';
-$route['^(listAkun|akunLists|setStatus|resetPass)(/:any)?$'] = 'Akun/$0';
+$route['^(listSiswa|siswaLists|siswaByInduk|doSiswa|deleteSiswa|detailSiswa|resetPoin|resetAllPoin)(/:any)?$'] = 'Siswa/$0';
+$route['^(listAkun|akunLists|setStatus|resetPass|gantiPass)(/:any)?$'] = 'Akun/$0';
 $route['^(listKelas|kelasLists|kelasById|doKelas|deleteKelas)(/:any)?$'] = 'Kelas/$0';
-$route['^(listJenispelanggaran|jenispelanggaranLists|jenispelanggaranById|doJenispelanggaran|deleteJenispelanggaran)(/:any)?$'] = 'Jenis_pelanggaran/$0';
+$route['^(listJenispelanggaran|jenispelanggaranLists|jenispelanggaranByKode|jenispelanggaranById|doJenispelanggaran|deleteJenispelanggaran|getKode)(/:any)?$'] = 'Jenis_pelanggaran/$0';
 $route['^(listWalimurid|walimuridLists|walimuridById|doWalimurid|deleteWalimurid)(/:any)?$'] = 'Walimurid/$0';
 $route['^(listSanksi|sanksiLists|sanksiById|doSanksi|deleteSanksi)(/:any)?$'] = 'Sanksi/$0';
-$route['^(ulasanLists|listUlasan)(/:any)?$'] = 'Ulasan/$0';
-$route['^(listUsers|userLists|usersById|gantiStatusUsers|doUsers|deleteUsers|editProfil|cekUsername|aksi_editProfil|editPassword)(/:any)?$'] = 'Users/$0';
-$route['^(listJenis|jenisLists|doJenis|editJenis|deleteJenis|jenisById)(/:any)?$'] = 'Jenis_kriteria/$0';
-$route['^(listKriteria|kriteriaLists|doKriteria|editKriteria|deleteKriteria|kriteriaById)(/:any)?$'] = 'Kriteria/$0';
-$route['^(listSubkriteria|subkriteriaLists|doSubkriteria|editSubkriteria|deleteSubkriteria|subkriteriaById)(/:any)?$'] = 'Subkriteria/$0';
-$route['^(listObjek|objekLists|doObjek|editObjek|deleteObjek|objekById|getDetailObjek)(/:any)?$'] = 'Objek_wisata/$0';
-$route['^(listAlternatif|alternatifLists|doAlternatif|editAlternatif|deleteAlternatif|alternatifById)(/:any)?$'] = 'Alternatif/$0';
-$route['^(listSelisih|selisihLists|doSelisih|editSelisih|deleteSelisih|selisihById)(/:any)?$'] = 'Selisih/$0';
-$route['^(indexPenilaian)(/:any)?$'] = 'Penilaian/$0';
+$route['^(listPelanggaran|pelanggaranLists|pelanggaranById|doPelanggaran|detailPelanggaran|deletePelanggaran|getKodePelanggaran)(/:any)?$'] = 'Pelanggaran/$0';
+$route['^(listCatatan|catatanLists|catatanById|doCatatan|deleteCatatan|detailCatatan|cetakByKasus|cetakByKategori)(/:any)?$'] = 'Catatan_kasus/$0';
+

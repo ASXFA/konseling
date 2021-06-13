@@ -1,0 +1,139 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Kelola Pelanggaran</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}listPelanggaran">kelola Pelanggaran</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">List Pelanggaran
+                                <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-pelanggaran" title="Tambah  Pelanggaran"><i class="fa fa-plus"></i></button></span>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-pelanggaran" class="display table table-striped table-hover" >
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Pelanggaran</th>
+                                            <th>Induk Siswa</th>
+                                            <th>Nama Siswa</th>
+                                            <th>Tanggal</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal-->
+     <div class="modal fade" id="modal-pelanggaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-pelanggaran">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Kode Pelanggaran </label>
+                                    <input type="text" name="kode_pelanggaran" id="kode_pelanggaran" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Siswa </label>
+                                    <select name="induk_siswa_pelanggaran" id="induk_siswa_pelanggaran" class="form-control" required>
+                                        {% for s in siswa %}
+                                        <option value="{{s.induk_siswa}}"><b>{{s.induk_siswa}}</b> | {{s.nama_siswa}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jenis Pelanggaran </label>
+                                    <select name="kode_jenis_pel_pelanggaran" id="kode_jenis_pel_pelanggaran" class="form-control" required>
+                                        <option>Pilih Jenis Pelanggaran</option>
+                                        {% for jp in jenis_pelanggaran %}
+                                        <option value="{{jp.kode_jenis_pelanggaran}}">{{jp.nama_jenis_pelanggaran}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Poin </label>
+                                    <input type="text" name="poin_pelanggaran" id="poin_pelanggaran" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Tanggal </label>
+                                    <input type="date" name="tanggal_pelanggaran" id="tanggal_pelanggaran" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Keterangan </label>
+                                    <textarea name="keterangan_pelanggaran" cols="3" rows="5" id="keterangan_pelanggaran" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- id and operation -->
+                    <input type="text" name="old_jenis_pelanggaran" id="old_jenis_pelanggaran" hidden>
+                    <input type="text" name="id_pelanggaran" id="id_pelanggaran" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    <!-- end -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal-->
+    <div class="modal fade bd-example-modal-lg" id="modal-detail-pelanggaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabelDetail"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered" id="table-detail-pelanggaran">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/pelanggaran.js"></script>
+{% endblock %}
