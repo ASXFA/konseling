@@ -65,6 +65,7 @@ class Siswa extends CI_Controller {
 
     public function siswaLists()
     {
+        $this->load->model('model_param_poin');
         $this->load->model('model_kelas');
         $siswa = $this->model_siswa->make_datatables();
         $data = array();
@@ -83,6 +84,8 @@ class Siswa extends CI_Controller {
                     $sub_data[] = "Kelas Tidak Ada !";
                 }
                 $sub_data[] = $row->poin_siswa." Poin";
+                $param = $this->model_param_poin->getById($row->id_param_poin_siswa);
+                $sub_data[] = $param->keterangan_param_poin;
                 $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailSiswa' id='".$row->induk_siswa."' title='Detail Siswa'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editSiswa' id='".$row->induk_siswa."' title='Edit Siswa'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteSiswa' id='".$row->induk_siswa."' title='Delete Siswa'><i class='fa fa-trash'></i></button><button class='btn btn-secondary btn-sm mr-2 resetPoin' id='".$row->induk_siswa."' title='Reset Poin'><i class='fa fa-undo'></i></button>";
                 $data[] = $sub_data;
                 $no++;
@@ -148,6 +151,7 @@ class Siswa extends CI_Controller {
     public function doSiswa()
     {
         $this->load->model('model_akun');
+        $this->load->model('model_absensi');
         $operation = $this->input->post('operation');
         $pesan = array();
         $id = $this->input->post('id_siswa');
@@ -168,6 +172,8 @@ class Siswa extends CI_Controller {
             );
             $process1 = $this->model_siswa->tambahSiswa($data);
             $process2 = $this->model_akun->tambahAkun($data2);
+            $data3 = array('id_siswa_absensi'=>$process1);
+            $this->model_absensi->tambahAbsensi($data3);
         }else if($operation == 'edit'){
             $data = array(
                 'induk_siswa' => $this->input->post('induk_siswa'),
@@ -180,7 +186,7 @@ class Siswa extends CI_Controller {
             $data2 = array('induk_akun' => $this->input->post('induk_siswa'));
             $process2 = $this->model_akun->editAkun($data2,$this->input->post('old_induk'));
         }
-        if ($process1 && $process2) {
+        if ($process2) {
             $pesan['cond'] = '1';
             $pesan['msg'] = 'Berhasil !';
         }else {

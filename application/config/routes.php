@@ -60,6 +60,7 @@ $route['^(rekomendasi|selengkapnyaObjek|beriUlasan|getUlasan)(/:any)?$'] = 'Fron
 $route['^(myProfile|editProfil|editFoto)(:any)?$'] = "Dashboard/$0";
 $route['^(auth|action_login|logout)(/:any)?$'] = 'Auth/$0';
 $route['^(index)(/:any)?$'] = 'Dashboard/$0';
+$route['^(kmeans|dataRealLists|dataKonversiLists|cekNilaiKehadiran)(/:any)?$'] = 'Kmeans/$0';
 $route['^(listGuru|guruLists|guruByInduk|doGuru|deleteGuru)(/:any)?$'] = 'Guru/$0';
 $route['^(listSiswa|siswaLists|siswaByInduk|doSiswa|deleteSiswa|detailSiswa|resetPoin|resetAllPoin)(/:any)?$'] = 'Siswa/$0';
 $route['^(listAkun|akunLists|setStatus|resetPass|gantiPass)(/:any)?$'] = 'Akun/$0';
@@ -67,6 +68,7 @@ $route['^(listKelas|kelasLists|kelasById|doKelas|deleteKelas)(/:any)?$'] = 'Kela
 $route['^(listJenispelanggaran|jenispelanggaranLists|jenispelanggaranByKode|jenispelanggaranById|doJenispelanggaran|deleteJenispelanggaran|getKode)(/:any)?$'] = 'Jenis_pelanggaran/$0';
 $route['^(listWalimurid|walimuridLists|walimuridById|doWalimurid|deleteWalimurid)(/:any)?$'] = 'Walimurid/$0';
 $route['^(listSanksi|sanksiLists|sanksiById|doSanksi|deleteSanksi)(/:any)?$'] = 'Sanksi/$0';
+$route['^(listAbsensi|absensiLists|absensiById|doAbsensi|deleteAbsensi)(/:any)?$'] = 'Absensi/$0';
 $route['^(listPelanggaran|pelanggaranLists|pelanggaranById|doPelanggaran|detailPelanggaran|deletePelanggaran|getKodePelanggaran)(/:any)?$'] = 'Pelanggaran/$0';
 $route['^(listCatatan|catatanLists|catatanById|doCatatan|deleteCatatan|detailCatatan|cetakByKasus|cetakByKategori)(/:any)?$'] = 'Catatan_kasus/$0';
 

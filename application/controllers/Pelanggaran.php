@@ -216,6 +216,24 @@ class Pelanggaran extends CI_Controller {
                 $count +=1;
             }
         }
+        $this->load->model('model_param_poin');
+        $param_poin = $this->model_param_poin->getAll();
+        $jl = 1;
+        foreach($param_poin as $pp){
+            if ($jl != 3) {
+                if ($siswa->poin_siswa <= $pp->nilai_max_param_poin) {
+                    $da = array('id_param_poin_siswa'=>$pp->id_param_poin);
+                    $this->model_siswa->editByIndukSiswa($da,$this->input->post('induk_siswa_pelanggaran'));
+                    break;
+                }
+            }else{
+                if ($siswa->poin_siswa > $pp->nilai_max_param_poin) {
+                    $da = array('id_param_poin_siswa'=>$pp->id_param_poin);
+                    $this->model_siswa->editByIndukSiswa($da,$this->input->post('induk_siswa_pelanggaran'));
+                }
+            }
+            $jl += 1;
+        }
         if ($process && $proces2) {
             $pesan['cond'] = '1';
             $pesan['msg'] = 'Berhasil !';

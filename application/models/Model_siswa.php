@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Model_siswa extends CI_Model {
     var $table = 'tbl_siswa';
-    var $select_column = array('id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa');
-    var $order_column = array(null,'id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa',null);
+    var $select_column = array('id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa','id_param_poin_siswa');
+    var $order_column = array(null,'id_siswa','induk_siswa','nama_siswa','alamat_siswa','jk_siswa','foto_siswa','poin_siswa','id_kelas_siswa','id_param_poin_siswa',null);
 
     function make_query()
     {
@@ -60,6 +60,12 @@ class Model_siswa extends CI_Model {
         return $this->db->get($this->table);
     }
 
+    public function getById($induk)
+    {
+        $this->db->where('id_siswa',$induk);
+        $query = $this->db->get($this->table);
+        return $query->row();
+    }
     public function getByInduk($induk)
     {
         $this->db->where('induk_siswa',$induk);
@@ -69,8 +75,8 @@ class Model_siswa extends CI_Model {
 
     public function tambahSiswa($data)
     {
-        $query = $this->db->insert($this->table,$data);
-        return $query;
+        $this->db->insert($this->table,$data);
+        return $this->db->insert_id();
     }
 
     public function editSiswa($data,$id)
@@ -91,6 +97,15 @@ class Model_siswa extends CI_Model {
     {
         $this->db->where('induk_siswa',$id);
         $query = $this->db->delete($this->table);
+        return $query;
+    }
+
+    public function getAllJoinAbsensi()
+    {
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->join('tbl_absensi','tbl_absensi.id_siswa_absensi = tbl_siswa.id_siswa');
+        $query = $this->db->get();
         return $query;
     }
 

@@ -1,0 +1,301 @@
+{% extends "main/templates/layout.html" %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <h4 class="page-title">Perhitungan Kmeans</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="{{base_url}}">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{base_url}}listJenispelanggaran">Perhitungan</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Data yang digunakan</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-data-real" class="display table table-striped table-hover" >
+                                    <thead class="bg-primary text-white">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Induk Siswa</th>
+                                            <th>Nama Siswa</th>
+                                            <th>DK (Data Kasus)</th>
+                                            <th>DKS (Data Kehadiran Siswa)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Data Konversi</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="table-responsive">
+                                        <table id="table-data-konversi" class="display table table-striped table-hover" >
+                                            <thead class="bg-primary text-white">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Induk Siswa</th>
+                                                    <th>Nama Siswa</th>
+                                                    <th>DK (Data Kasus)</th>
+                                                    <th>DKS (Data Kehadiran Siswa)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <table class="table table-bordered mt-5">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <th class="text-center" colspan="3">Centroid Awal</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Centroid</th>
+                                                <th>X</th>
+                                                <th>Y</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>C1</td>
+                                                <td>{{c1x}}</td>
+                                                <td>{{c1y}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>C2</td>
+                                                <td>{{c2x}}</td>
+                                                <td>{{c2y}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>C3</td>
+                                                <td>{{c3x}}</td>
+                                                <td>{{c3y}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <?php 
+                $j=1;
+                for($i=0; $i<$j; $i++){
+                    if($i == 0){
+                        $c1x = $c1xAwal;
+                        $c1y = $c1yAwal;
+                        $c2x = $c2xAwal;
+                        $c2y = $c2yAwal;
+                    }else if($i != 0){
+                        $c1x = $hasilC1x;
+                        $c1y = $hasilC1y;
+                        $c2x = $hasilC2x;
+                        $c2y = $hasilC2y;
+                    }
+                    $semuaCluster1 = array();
+                    $semuaCluster2 = array();
+                    $hasilC1x = 0;
+                    $hasilC1y = 0;
+                    $hasilC2x = 0;
+                    $hasilC2y = 0;
+                    $jmlhdata1 = 0;
+                    $jmlhdata2 = 0;
+            ?> -->
+            <div class="row" id="row-hasil">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tabel Hasil Hitung Kmeans</h4>
+                        </div>
+                        <div class="card-body">
+                            <table id="table-hasil" class="display table table-striped table-hover" >
+                                <thead class="bg-primary text-white">
+                                    <th>Induk Siswa</th>
+                                    <th>Nama Siswa</th>
+                                    <th>DK</th>
+                                    <th>DKS</th>
+                                    <th>Hasil</th>
+                                </thead>
+                                <tbody>
+                                    {% for hasil in hasill %}
+                                    <tr>
+                                        <td>{{hasil.induk_siswa}}</td>
+                                        <td>{{hasil.nama_siswa}}</td>
+                                        <td>{{hasil.poin_siswa}}</td>
+                                        <td>{{hasil.nilai_absensi}}</td>
+                                        {% if hasil.hasil_kmeans == 1 %}
+                                        <td class="bg-success text-white">DISIPLIN</td>
+                                        {% elseif hasil.hasil_kmeans==2 %}
+                                        <td class="bg-warning text-white">CUKUP</td>
+                                        {% else %}
+                                        <td class="bg-danger text-white">TIDAK DISIPLIN</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Pie Chart</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div>
+            <?php 
+                $jmlhPerbedaan = 0;
+                if(!empty($semuaCluster2)){
+                    for($k=0; $k < count($semuaCluster1); $k++){
+                        if($semuaCluster1[$k] == $semuaCluster2[$k]){
+                            $jmlhPerbedaan += 1;
+                        }
+                    }
+                    if ($jmlhPerbedaan != 0) {
+                        $j = $j+1;
+                    }else if($jmlhPerbedaan == 0){
+                        $jumlahData = $jmlhdata1 + $jmlhdata2;
+                        $hasilJmlhData1 = ($jmlhdata1 / $jumlahData)*100;
+                        $hasilJmlhData2 = ($jmlhdata2 / $jumlahData)*100;
+            ?> -->
+                    <!-- <script src="<?= base_url('assets/backend/') ?>plugins/jquery/jquery.min.js"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function(){
+                            let j1 = <?= $jmlhdata1 ?>;
+                            let j2 = <?= $jmlhdata2 ?>;
+                            $.ajax({
+                                type: 'POST',
+                                url: "<?= base_url('backend/HasilKmeans/edit/1') ?>",
+                                data: {j1:j1, j2:j2},
+                                success: function(data) {
+                                    alert(' Cluster tidak berubah ! Sukses Menghitung k-means !');
+                                    $('html').animate({scrollTop : $(document).height()},2600);
+                                }
+                            });
+                        });
+                    </script>
+            <?php
+                    }
+                }else{
+                    $j = $j+1;
+                }
+            }                           
+            ?> -->
+        </div>
+    </div>
+     <!-- Modal-->
+     <!-- <div class="modal fade" id="modal-sanksi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="form-sanksi">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Nama sanksi </label>
+                                    <input type="text" name="nama_sanksi" id="nama_sanksi" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-control-label">Jumlah Point Maksimal </label>
+                                    <input type="number" name="jumlah_poin_sanksi" id="jumlah_poin_sanksi" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    id and operation
+                    <input type="text" name="id_sanksi" id="id_sanksi" hidden>
+                    <input type="text" name="operation" id="operation" hidden>
+                    end
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> -->
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/js/plugin/chart.js/chart.min.js"></script>
+<script>
+    var data1 = "{{hasilJmlhData1}}";
+    var data2 = "{{hasilJmlhData2}}";
+    var data3 = "{{hasilJmlhData3}}";
+    var myPieChart = new Chart(pieChart, {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [parseInt(data1), parseInt(data2), parseInt(data3)],
+					backgroundColor :["#31ce36","#ffad46","#f25961"],
+					borderWidth: 0
+				}],
+				labels: ['Disiplin', 'Cukup', 'Tidak Disiplin'] 
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position : 'bottom',
+					labels : {
+						fontColor: 'rgb(154, 154, 154)',
+						fontSize: 11,
+						usePointStyle : true,
+						padding: 20
+					}
+				},
+				pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 16,
+				},
+				tooltips: false,
+				layout: {
+					padding: {
+						left: 10,
+						right: 10,
+						top: 10,
+						bottom: 10
+					}
+				}
+			}
+		})
+</script>
+<script src="{{base_url}}assets/action/hasilKmeans.js"></script>
+{% endblock %}

@@ -6,8 +6,7 @@
             <div class="page-inner py-5">
                 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                     <div>
-                        <h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-                        <h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+                        <h1 class="text-white pb-2 fw-bold">Dashboard</h1>
                     </div>
                     <!-- <div class="ml-md-auto py-2 py-md-0">
                         <a href="#" class="btn btn-white btn-border btn-round mr-2">Manage</a>
@@ -17,30 +16,117 @@
             </div>
         </div>
         <div class="page-inner mt--5">
-            <div class="row mt--2">
-                <div class="col-md-12">
-                    <div class="card full-height">
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-info card-round">
                         <div class="card-body">
-                            <div class="card-title">Informasi Dashboard</div>
-                            <!-- <div class="card-category">Daily information about statistics in system</div> -->
-                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-1"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">New Users</h6>
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="flaticon-users"></i>
+                                    </div>
                                 </div>
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-2"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">Sales</h6>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <p class="card-category">Jumlah Siswa</p>
+                                        <h4 class="card-title">{{siswa}}</h4>
+                                    </div>
                                 </div>
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-3"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">Subscribers</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-info card-round">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="flaticon-interface-6"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <p class="card-category">Jumlah Pelanggaran</p>
+                                        <h4 class="card-title">{{pelanggaran}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-info card-round">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="flaticon-list"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <p class="card-category">Jumlah Catatan Kasus</p>
+                                        <h4 class="card-title">{{catatan}}</h4>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-primary">
+                            <h4 class="card-title">Pelanggaran yang belum dimasukan kedalam catatan kasus</h4>
+                        </div>
+                        <div class="card-body">
+                            <table id="table-pel" class="display table table-striped table-hover" >
+                                <thead class="bg-primary text-white">
+                                    <th>Kode Pelanggaran</th>
+                                    <th>Induk Siswa</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Nama Pelanggaran</th>
+                                    <th>Poin</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal</th>
+                                </thead>
+                                <tbody>
+                                    {% if pelanggaran_table is empty %}
+                                    <tr>
+                                        <td colspan="7">Data Tidak Ada</td>
+                                    </tr>
+                                    {% else %}
+                                    {% for p in pelanggaran_table %}
+                                    <tr>
+                                        <td>{{p.kode_pelanggaran}}</td>
+                                        <td>{{p.induk_siswa_pelanggaran}}</td>
+                                        {% for s in siswa_table %}
+                                        {% if p.induk_siswa_pelanggaran == s.induk_siswa %}
+                                        <td>{{s.nama_siswa}}</td>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% for jpel in jp_table %}
+                                        {% if p.kode_jenis_pel_pelanggaran == jpel.kode_jenis_pelanggaran %}
+                                        <td>{{jpel.nama_jenis_pelanggaran}}</td>
+                                        <td>{{jpel.poin_jenis_pelanggaran}}</td>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <td>{{p.keterangan_pelanggaran}}</td>
+                                        <td>{{p.tanggal_pelanggaran|date('d F Y')}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+{% endblock %}
+{% block js %}
+<script src="{{base_url}}assets/action/dashboard.js"></script>
 {% endblock %}

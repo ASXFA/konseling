@@ -98,8 +98,8 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                {% if role_user_login == 1 %}
-                <li class="nav-item" id="li-user">
+                {% if role_user_login == 1 %} 
+                <li class="nav-item" id="li-kelola">
                     <a data-toggle="collapse" href="#base" id="user-page">
                         <i class="fas fa-list"></i>
                         <p>Kelola Data</p>
@@ -107,54 +107,129 @@
                     </a>
                     <div class="collapse" id="base">
                         <ul class="nav nav-collapse">
-                            <li>
-                                <a href="{{base_url}}listGuru" id="sub-guru">
+                            <li id="sub-guru">
+                                <a href="{{base_url}}listGuru" >
                                     <span class="sub-item">Guru</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listSiswa" id="sub-siswa">
+                            <li id="sub-siswa">
+                                <a href="{{base_url}}listSiswa" >
                                     <span class="sub-item">Siswa</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listAkun" id="sub-akun">
+                            <li id="sub-akun">
+                                <a href="{{base_url}}listAkun" >
                                     <span class="sub-item">Kelola Akun</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listKelas" id="sub-kelas">
+                            <li id="sub-kelas">
+                                <a href="{{base_url}}listKelas" >
                                     <span class="sub-item">Kelola Kelas</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listWalimurid" id="sub-walimurid">
+                            <li id="sub-walimurid">
+                                <a href="{{base_url}}listWalimurid" >
                                     <span class="sub-item">Kelola Walimurid</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listJenispelanggaran" id="sub-jenipelanggaran">
+                            <li id="sub-jenispelanggaran">
+                                <a href="{{base_url}}listJenispelanggaran" >
                                     <span class="sub-item">Kelola Jenis Pelanggaran</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{base_url}}listSanksi" id="sub-sanksi">
+                            <li id="sub-sanksi">
+                                <a href="{{base_url}}listSanksi">
                                     <span class="sub-item">Kelola Sanksi</span>
+                                </a>
+                            </li>
+                            <li id="sub-absensi">
+                                <a href="{{base_url}}listAbsensi">
+                                    <span class="sub-item">Nilai Absensi</span>
+                                </a>
+                            </li>
+                            <li id="sub-pelanggaran">
+                                <a href="{{base_url}}listPelanggaran">
+                                    <span class="sub-item">Pelanggaran</span>
+                                </a>
+                            </li>
+                            <li id="sub-catatan">
+                                <a href="{{base_url}}listCatatan">
+                                    <span class="sub-item">Catatan Kasus</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" id="pelanggaran-page">
-                    <a href="{{base_url}}listPelanggaran">
-                        <i class="fas fa-home"></i>
-                        <p>Pelanggaran</p>
+                <li class="nav-item" id="kmeans-page">
+                    <a href="{{base_url}}kmeans">
+                        <i class="fas fa-pen-alt"></i>
+                        <p>Perhitungan Kmeans</p>
                     </a>
                 </li>
-                <li class="nav-item" id="catatan-page">
-                    <a href="{{base_url}}listCatatan">
-                        <i class="fas fa-home"></i>
-                        <p>Catatan Kasus</p>
+                {% elseif role_user_login == 2 %}
+                <li class="nav-item" id="li-kelola">
+                    <a data-toggle="collapse" href="#base" id="user-page">
+                        <i class="fas fa-list"></i>
+                        <p>Kelola Data</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="base">
+                        <ul class="nav nav-collapse">
+                            <li id="sub-siswa">
+                                <a href="{{base_url}}listSiswa" >
+                                    <span class="sub-item">Siswa</span>
+                                </a>
+                            </li>
+                            <li id="sub-absensi">
+                                <a href="{{base_url}}listAbsensi">
+                                    <span class="sub-item">Nilai Absensi</span>
+                                </a>
+                            </li>
+                            <li id="sub-pelanggaran">
+                                <a href="{{base_url}}listPelanggaran">
+                                    <span class="sub-item">Pelanggaran</span>
+                                </a>
+                            </li>
+                            <li id="sub-catatan">
+                                <a href="{{base_url}}listCatatan">
+                                    <span class="sub-item">Catatan Kasus</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item" id="kmeans-page">
+                    <a href="{{base_url}}kmeans">
+                        <i class="fas fa-pen-alt"></i>
+                        <p>Perhitungan Kmeans</p>
+                    </a>
+                </li>
+                {% elseif role_user_login == 3 %}
+                <li class="nav-item" id="li-kelola">
+                    <a data-toggle="collapse" href="#base" id="user-page">
+                        <i class="fas fa-list"></i>
+                        <p>Kelola Data</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="base">
+                        <ul class="nav nav-collapse">
+                            <li id="sub-pelanggaran">
+                                <a href="{{base_url}}listPelanggaran">
+                                    <span class="sub-item">Pelanggaran</span>
+                                </a>
+                            </li>
+                            <li id="sub-catatan">
+                                <a href="{{base_url}}listCatatan">
+                                    <span class="sub-item">Catatan Kasus</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item" id="kmeans-page">
+                    <a href="{{base_url}}kmeans">
+                        <i class="fas fa-pen-alt"></i>
+                        <p>Perhitungan Kmeans</p>
                     </a>
                 </li>
                 {% endif %}

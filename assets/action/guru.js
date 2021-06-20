@@ -1,7 +1,7 @@
 $(function(){
-    // $('#li-user').attr('class','nav-item submenu');
-    // $('#base').attr('class','collapse show');
-    // $('#sub-guru').attr('class','active');
+    $('#li-kelola').addClass('active submenu');
+    $('#base').addClass('show');
+    $('#sub-guru').addClass('active');
 
     $('#table-guru').DataTable({
         "processing": true,

@@ -58,6 +58,16 @@ class Dashboard extends CI_Controller {
 
 	public function index()
 	{
+        $this->load->model('model_siswa');
+        $this->load->model('model_pelanggaran');
+        $this->load->model('model_jenis_pelanggaran');
+        $this->load->model('model_catatan_kasus');
+        $this->content['siswa'] = $this->model_siswa->get_all_data();
+        $this->content['pelanggaran'] = $this->model_pelanggaran->get_all_data();
+        $this->content['catatan'] = $this->model_catatan_kasus->get_all_data();
+        $this->content['pelanggaran_table'] = $this->model_pelanggaran->getAllByStatus(0)->result();
+        $this->content['siswa_table'] = $this->model_siswa->getAll()->result();
+        $this->content['jp_table'] = $this->model_jenis_pelanggaran->getAll()->result();
 		$this->twig->display('main/dashboard.html',$this->content);
 	}
 
