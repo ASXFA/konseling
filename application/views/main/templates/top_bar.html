@@ -170,7 +170,7 @@
                 <li class="nav-item" id="li-kelola">
                     <a data-toggle="collapse" href="#base" id="user-page">
                         <i class="fas fa-list"></i>
-                        <p>Kelola Data</p>
+                        <p>Main</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="base">
@@ -180,11 +180,6 @@
                                     <span class="sub-item">Siswa</span>
                                 </a>
                             </li>
-                            <li id="sub-absensi">
-                                <a href="{{base_url}}listAbsensi">
-                                    <span class="sub-item">Nilai Absensi</span>
-                                </a>
-                            </li>
                             <li id="sub-pelanggaran">
                                 <a href="{{base_url}}listPelanggaran">
                                     <span class="sub-item">Pelanggaran</span>
@@ -198,17 +193,11 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" id="kmeans-page">
-                    <a href="{{base_url}}kmeans">
-                        <i class="fas fa-pen-alt"></i>
-                        <p>Perhitungan Kmeans</p>
-                    </a>
-                </li>
                 {% elseif role_user_login == 3 %}
                 <li class="nav-item" id="li-kelola">
                     <a data-toggle="collapse" href="#base" id="user-page">
                         <i class="fas fa-list"></i>
-                        <p>Kelola Data</p>
+                        <p>Main</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="base">
@@ -225,12 +214,6 @@
                             </li>
                         </ul>
                     </div>
-                </li>
-                <li class="nav-item" id="kmeans-page">
-                    <a href="{{base_url}}kmeans">
-                        <i class="fas fa-pen-alt"></i>
-                        <p>Perhitungan Kmeans</p>
-                    </a>
                 </li>
                 {% endif %}
             </ul>

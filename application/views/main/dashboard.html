@@ -5,9 +5,22 @@
         <div class="panel-header bg-primary-gradient">
             <div class="page-inner py-5">
                 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-                    <div>
-                        <h1 class="text-white pb-2 fw-bold">Dashboard</h1>
+                    <div class="col-md-6">
+                        <h1 class="text-white">SELAMAT DATANG KEMBALI <b>{{nama_user_login}}</b></h1>
+                        <h1 class="text-white">{{induk_user_login}}</h1>
                     </div>
+                    {% if role_user_login == 3 %}
+                    <div class="col-md-6">
+                        <h1 class="display-4 text-white text-right">Poin BK Anda : {{poin_user_login}} Poin</h1>
+                        <h3 class="float-right text-warning">Sanksi : 
+                            {% for s in sanksi %}
+                            {% if s.id_sanksi == status_sanksi_login %}
+                            {{s.nama_sanksi}}
+                            {% endif %}
+                            {% endfor %}
+                        </h3>
+                    </div>
+                    {% endif %}
                     <!-- <div class="ml-md-auto py-2 py-md-0">
                         <a href="#" class="btn btn-white btn-border btn-round mr-2">Manage</a>
                         <a href="#" class="btn btn-secondary btn-round">Add Customer</a>
@@ -16,6 +29,7 @@
             </div>
         </div>
         <div class="page-inner mt--5">
+            {% if role_user_login != 3 %}
             <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div class="card card-stats card-info card-round">
@@ -28,8 +42,14 @@
                                 </div>
                                 <div class="col-7 col-stats">
                                     <div class="numbers">
-                                        <p class="card-category">Jumlah Siswa</p>
-                                        <h4 class="card-title">{{siswa}}</h4>
+                                        <p class="card-category">Jumlah Siswa Anda</p>
+                                        <h4 class="card-title">
+                                            {% if role_user_login == 1%}
+                                            {{siswa}}
+                                            {% elseif role_user_login == 2 %}
+                                            {{siswa|length}}
+                                            {% endif %}
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -47,8 +67,14 @@
                                 </div>
                                 <div class="col-7 col-stats">
                                     <div class="numbers">
-                                        <p class="card-category">Jumlah Pelanggaran</p>
-                                        <h4 class="card-title">{{pelanggaran}}</h4>
+                                        <p class="card-category">Jumlah Pelanggaran Pada Siswa Anda</p>
+                                        <h4 class="card-title">
+                                            {% if role_user_login == 1%}
+                                            {{pelanggaran}}
+                                            {% elseif role_user_login == 2 %}
+                                            {{hasilP|length}}
+                                            {% endif %}
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -66,8 +92,14 @@
                                 </div>
                                 <div class="col-7 col-stats">
                                     <div class="numbers">
-                                        <p class="card-category">Jumlah Catatan Kasus</p>
-                                        <h4 class="card-title">{{catatan}}</h4>
+                                        <p class="card-category">Jumlah Catatan Kasus Siswa Anda</p>
+                                        <h4 class="card-title">
+                                            {% if role_user_login == 1%}
+                                            {{catatan}}
+                                            {% elseif role_user_login == 2 %}
+                                            {{hasilC|length}}
+                                            {% endif %}
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -75,6 +107,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if role_user_login == 1 %}
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -124,6 +158,99 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if role_user_login == 2 %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Pelanggaran Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="table-pel" class="display table table-striped table-hover" >
+                                <thead class="bg-primary text-white">
+                                    <th>Kode Pelanggaran</th>
+                                    <th>Induk Siswa</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Nama Pelanggaran</th>
+                                    <th>Poin</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal</th>
+                                </thead>
+                                <tbody>
+                                    {% set tgl = "now"|date('Y-m-d') %}
+                                    {% for p in pelanggaran %}
+                                        {% if tgl == p.tanggal_pelanggaran %}
+                                        {% for s in siswa %}
+                                            {% if s.induk_siswa == p.induk_siswa_pelanggaran %}
+                                                <tr>
+                                                    <td>{{p.kode_pelanggaran}}</td>
+                                                    <td>{{p.induk_siswa_pelanggaran}}</td>
+                                                    <td>{{s.nama_siswa}}</td>
+                                                    {% for jp in jp_table %}
+                                                    {% if jp.kode_pelanggaran == p.kode_jenis_pel_pelanggaran %}
+                                                    <td>{{jp.nama_jenis_pelanggaran}}</td>
+                                                    <td>{{jp.poin_pelanggaran}}</td>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    <td>{{p.keterangan_pelanggaran}}</td>
+                                                    <td>{{p.tanggal_pelanggaran}}</td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if role_user_login == 3%}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Pelanggaran Terbaru Hari ini</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="table-pel" class="display table table-striped table-hover" >
+                                <thead class="bg-primary text-white">
+                                    <th>Kode Pelanggaran</th>
+                                    <th>Induk Siswa</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Nama Pelanggaran</th>
+                                    <th>Poin</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal</th>
+                                </thead>
+                                <tbody>
+                                    {% set tgl = "now"|date('Y-m-d') %}
+                                    {% for p in pelanggaran %}
+                                        {% if tgl == p.tanggal_pelanggaran %}
+                                            <tr>
+                                                <td>{{p.kode_pelanggaran}}</td>
+                                                <td>{{p.induk_siswa_pelanggaran}}</td>
+                                                <td>{{s.nama_siswa}}</td>
+                                                {% for jp in jp_table %}
+                                                {% if jp.kode_pelanggaran == p.kode_jenis_pel_pelanggaran %}
+                                                <td>{{jp.nama_jenis_pelanggaran}}</td>
+                                                <td>{{jp.poin_pelanggaran}}</td>
+                                                {% endif %}
+                                                {% endfor %}
+                                                <td>{{p.keterangan_pelanggaran}}</td>
+                                                <td>{{p.tanggal_pelanggaran}}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -24,7 +24,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">List Pelanggaran
+                                {% if role_user_login == 1 %}
                                 <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-pelanggaran" title="Tambah  Pelanggaran"><i class="fa fa-plus"></i></button></span>
+                                {% endif %}
                             </h4>
                         </div>
                         <div class="card-body">

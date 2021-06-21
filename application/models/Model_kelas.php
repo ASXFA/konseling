@@ -60,6 +60,13 @@ class Model_kelas extends CI_Model {
         return $query->row();
     }
 
+    public function getByIdGuru($id_guru)
+    {
+        $this->db->where('id_guru_kelas',$id_guru);
+        $query = $this->db->get($this->table);
+        return $query->row();
+    }
+
     public function tambahKelas($data)
     {
         $query = $this->db->insert($this->table,$data);

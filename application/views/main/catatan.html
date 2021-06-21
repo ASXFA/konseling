@@ -24,7 +24,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">List Catatan Kasus
+                                {% if role_user_login == 1%}
                                 <span class="float-right"><button class="btn btn-primary btn-sm" id="btn-tambah-catatan" title="Tambah Catatan Kasus"><i class="fa fa-plus"></i></button></span>
+                                {% endif %}
                             </h4>
                         </div>
                         <div class="card-body">
@@ -62,10 +64,14 @@
                                         <div class="form-group">
                                             <label for="" class="form-control-label">Siswa</label>
                                             <select class="form-control select2-single" name="induk_siswa_print" id="induk_siswa_print" required>
+                                                {% if role_user_login != 3%}
                                                 <option value="0">Semua</option>
                                                 {% for s in siswa %}
                                                 <option value="{{s.induk_siswa}}">{{s.induk_siswa}} | {{s.nama_siswa}}</option>
                                                 {% endfor %}
+                                                {% else %}
+                                                <option value="{{induk_user_login}}">{{induk_user_login}} | {{nama_user_login}}</option>
+                                                {% endif %}
                                             </select>
                                         </div>
                                     </div>

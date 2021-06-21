@@ -72,6 +72,12 @@ class Model_siswa extends CI_Model {
         $query = $this->db->get($this->table);
         return $query->row();
     }
+    public function getByIdKelas($id_kelas)
+    {
+        $this->db->where('id_kelas_siswa',$id_kelas);
+        $query = $this->db->get($this->table);
+        return $query;
+    }
 
     public function tambahSiswa($data)
     {

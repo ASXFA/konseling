@@ -112,24 +112,30 @@
             <div class="container">
                 <table class="table-borderless2">
                     <tr>
-                        <td><img src="{{base_url}}assets/img/logo-kemendikbud.png" style="padding-right: 30px;" width="17%" alt="logo-kemendikbud"></td>
+                        <td><img src="{{base_url}}assets/img/logo-kemendikbud.png" style="padding-right: 30px;" width="10%" alt="logo-kemendikbud"></td>
                         <td class="text-center">
-                            <p style="font-size: 37px; font-weight: bolder;">SMK NEGERI 3 BANDUNG</p>
-                            <h3>Jalan Solontongan No.10 Kel. Turangga Kec. Lengkong</h3>
-                            <h3> Bandung, Jawa Barat, 40264</h3>
-                            <h3>Telepon : (022) 7305529</h3>
-                            <h3>Email : admin@smkn3bandung@gmail.com</h3>
+                            <p style="font-size: 30px; font-weight: bolder;">SMK NEGERI 3 BANDUNG</p>
+                            <h4>Jalan Solontongan No.10 Kel. Turangga Kec. Lengkong</h4>
+                            <h4> Bandung, Jawa Barat, 40264</h4>
+                            <h4>Telepon : (022) 7305529</h4>
+                            <h4>Email : admin@smkn3bandung@gmail.com</h4>
                         </td>
-                        <td><img src="{{base_url}}assets/img/logo-smkn-3.png" style="padding-left: 30px;" width="21%" alt="logo-kemendikbud"></td>
+                        <td><img src="{{base_url}}assets/img/logo-smkn-3.png" style="padding-left: 30px;" width="14%" alt="logo-kemendikbud"></td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <hr style="height: 3px; color:black;">
-                            <hr style="height: 5px; color:black; margin-top:-9px; width: 99.7%; ">
+                            <hr style="height: 1px; color:black;">
+                            <hr style="height: 3px; color:black; margin-top:-9px; width: 99.7%; ">
                         </td>
                     </tr>
                 </table>
-                <h3 class="text-center" style="margin-top:-10px;"><b><u>LAPORAN CATATAN KASUS</u></b></h3>
+                <h3 class="text-center" style="margin-top:-10px;"><b><u>LAPORAN CATATAN KASUS
+                    {% if nama_bulan != "semua" %}
+                    {{nama_bulan}}
+                    {% endif %}
+                    {% if tahun != "0" %}
+                    {{tahun}}
+                    {% endif %}</u></b></h3>
                 <p class="f-12"><b>Siswa dengan biodata dibawah ini :</b> </p>
                 <table class="table-borderless f-12">
                     <tr>

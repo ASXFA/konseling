@@ -4,7 +4,12 @@
     <div class="content">
         <div class="page-inner">
             <div class="page-header">
-                <h4 class="page-title">Kelola Siswa</h4>
+                <h4 class="page-title">
+                    {% if role_user_login == 1 %}
+                    Kelola 
+                    {% endif %}
+                    Siswa
+                </h4>
                 <ul class="breadcrumbs">
                     <li class="nav-home">
                         <a href="{{base_url}}">
@@ -15,7 +20,12 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{base_url}}listGuru">kelola Siswa</a>
+                        <a href="{{base_url}}listGuru">
+                            {% if role_user_login == 1 %}
+                            Kelola 
+                            {% endif %}
+                            Siswa
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -25,8 +35,10 @@
                         <div class="card-header">
                             <h4 class="card-title">List Siswa
                                 <span class="float-right">
+                                    {% if role_user_login == 1 %}
                                     <button class="btn btn-primary btn-sm" id="btn-tambah-siswa" title="Tambah Siswa"><i class="fa fa-plus"></i></button>
                                     <button class="btn btn-secondary btn-sm" id="btn-reset-all-poin" title="Reset Semua Poin Siswa"><i class="fa fa-undo"></i></button>
+                                    {% endif %}
                                 </span>
                             </h4>
                         </div>

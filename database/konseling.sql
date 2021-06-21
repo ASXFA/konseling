@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 13, 2021 at 09:03 AM
+-- Host: localhost:3306
+-- Generation Time: Jun 21, 2021 at 02:19 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -20,6 +21,30 @@ SET time_zone = "+00:00";
 --
 -- Database: `konseling`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_absensi`
+--
+
+CREATE TABLE `tbl_absensi` (
+  `id_absensi` int(5) NOT NULL,
+  `id_siswa_absensi` int(5) NOT NULL,
+  `nilai_absensi` int(5) DEFAULT NULL,
+  `id_param_kehadiran_absensi` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_absensi`
+--
+
+INSERT INTO `tbl_absensi` (`id_absensi`, `id_siswa_absensi`, `nilai_absensi`, `id_param_kehadiran_absensi`) VALUES
+(1, 1, 100, 1),
+(2, 2, 65, 2),
+(3, 3, 30, 3),
+(4, 4, 85, 1),
+(5, 5, 65, 2);
 
 -- --------------------------------------------------------
 
@@ -41,11 +66,13 @@ CREATE TABLE `tbl_akun` (
 --
 
 INSERT INTO `tbl_akun` (`id_akun`, `username_akun`, `password_akun`, `induk_akun`, `role_akun`, `status_akun`) VALUES
-(1, 'mytest', '$2y$10$II6vtBxta4ukNH5mqLS.G.JzWBH.CjE6xpW.OpV5vTtl8vXPeKW5S', '12345', 1, 1),
+(1, 'mytest', '$2y$10$vZJhrbgHVvZVLUyZ32n/p.QnrCQ70yxSlt5ubAEDIXqnsmXs17Bne', '12345', 1, 1),
 (2, 'test2', '$2y$10$udqZTjhjy4LQpcm3nt06zenF8WVx2oUYklTjFwm3TZtbg5dQkUARi', '121212121212121', 3, 1),
-(4, '11111', '$2y$10$JBzg7AqJrTFXxjVLLT867uGBAVzvtFsiIu5vHJoycn84nGa4IsSL2', '2222', 2, 0),
+(4, '11111', '$2y$10$GKVLLgpPTaPuIY6GSGQZWO8c0ncj7gpOvTATO1xQoSXKLEytrSRPa', '2222', 2, 1),
 (5, '333', '$2y$10$7dq3y5ltiw16UkyDP4SnbefBcmbkcURhKDXnedo4ALOrTv8rD.vum', '999', 3, 0),
-(6, '123', '$2y$10$2ziprjjr1mKYIt2rY//e5eP3Lm8fRMC2d8C2RoLauuqiukixRjFba', '123', 3, 0);
+(6, '123', '$2y$10$2ziprjjr1mKYIt2rY//e5eP3Lm8fRMC2d8C2RoLauuqiukixRjFba', '123', 3, 1),
+(7, '54321', '$2y$10$xXgc5spO93SiIZUL2vct9uOXFJYfxXtxnNVlN/u70iR72ZaOOQaK.', '54321', 3, 0),
+(8, '15555', '$2y$10$PjCE9a1rhhVY.thJQ55XGemxFjZsJT794HLrKcN4hlpXmHPLjK35S', '00000', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -70,7 +97,8 @@ INSERT INTO `tbl_catatan_kasus` (`id_catatan_kasus`, `id_pelanggaran_catatan_kas
 (2, 1, 'Diberi peringatan langsung', 'Tidak akan mengulangi lagi', '2021-06-09', 'wali kelas dan guru bk'),
 (3, 2, 'Memberikan peringatan langsung kepada siswa ybs', 'Tidak akan menggunakan perhiasan secara berlebihan', '2021-06-13', 'Guru bk, walikelas'),
 (4, 3, 'Memberi peringatan Langsung', 'Berjanji untuk tidak terlambat lagi', '2021-06-13', 'Guru Bk'),
-(5, 4, 'Memberikan peringatan Langsung', 'Tidak akan mengulanginya lagi', '2021-06-13', 'Guru bk');
+(5, 4, 'Memberikan peringatan Langsung', 'Tidak akan mengulanginya lagi', '2021-06-13', 'Guru bk'),
+(6, 18, 'diberi peringatan', 'tidak akan mengulangi', '2021-06-20', 'guru, guru bk ');
 
 -- --------------------------------------------------------
 
@@ -92,8 +120,8 @@ CREATE TABLE `tbl_guru` (
 --
 
 INSERT INTO `tbl_guru` (`id_guru`, `induk_guru`, `nama_guru`, `jabatan_guru`, `telp_guru`, `foto_guru`) VALUES
-(3, '2222', 'anu', 2, '08767444', 'default-photo.png'),
-(4, '12345', 'my tests', 1, '0213245332', 'po.png');
+(3, '2222', 'anu', 2, '08767444', 'chadengle.jpg'),
+(4, '12345', 'my tests', 1, '0213245332', 'jm_denis.jpg');
 
 -- --------------------------------------------------------
 
@@ -136,7 +164,13 @@ CREATE TABLE `tbl_jenis_pelanggaran` (
 INSERT INTO `tbl_jenis_pelanggaran` (`id_jenis_pelanggaran`, `kode_jenis_pelanggaran`, `nama_jenis_pelanggaran`, `kategori_jenis_pelanggaran`, `poin_jenis_pelanggaran`) VALUES
 (2, 'JPBK0001', 'Datang terlambat Lebih dari 10 menit', 'A', 5),
 (3, 'JPBK0002', 'Membuat Gaduh dalam kelas', 'A', 5),
-(4, 'JPBK0003', 'Mengenakan Perhiasan secara berlebihan', 'A', 5);
+(4, 'JPBK0003', 'Mengenakan Perhiasan secara berlebihan', 'A', 5),
+(5, 'JPBK0004', 'Keluar kelas saat ganti pelajaran', 'A', 5),
+(6, 'JPBK0005', 'Tidak Melaksanakan Piket Kelas', 'A', 5),
+(7, 'JPBK0006', 'Baju tidak dimasukkan', 'A', 10),
+(8, 'JPBK0007', 'Mencoret Pakaian Seragam', 'A', 10),
+(9, 'JPBK0008', 'Rambut tidak diikat bagi perempuan', 'A', 10),
+(10, 'JPBK0009', 'Pakaian tidak sesuai dengan ketentuan', 'A', 15);
 
 -- --------------------------------------------------------
 
@@ -151,6 +185,55 @@ CREATE TABLE `tbl_kelas` (
   `keterangan_kelas` varchar(150) NOT NULL,
   `id_guru_kelas` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_kelas`
+--
+
+INSERT INTO `tbl_kelas` (`id_kelas`, `kode_kelas`, `nama_kelas`, `keterangan_kelas`, `id_guru_kelas`) VALUES
+(2, 'K0001', 'Kelas 1A', 'asda', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_param_kehadiran`
+--
+
+CREATE TABLE `tbl_param_kehadiran` (
+  `id_param_kehadiran` int(5) NOT NULL,
+  `nilai_max_param_kehadiran` int(5) NOT NULL,
+  `keterangan_param_kehadiran` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_param_kehadiran`
+--
+
+INSERT INTO `tbl_param_kehadiran` (`id_param_kehadiran`, `nilai_max_param_kehadiran`, `keterangan_param_kehadiran`) VALUES
+(1, 70, 'Baik'),
+(2, 55, 'Cukup'),
+(3, 54, 'Buruk');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_param_poin`
+--
+
+CREATE TABLE `tbl_param_poin` (
+  `id_param_poin` int(5) NOT NULL,
+  `nilai_max_param_poin` int(5) NOT NULL,
+  `keterangan_param_poin` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_param_poin`
+--
+
+INSERT INTO `tbl_param_poin` (`id_param_poin`, `nilai_max_param_poin`, `keterangan_param_poin`) VALUES
+(1, 30, 'Baik'),
+(2, 50, 'Cukup'),
+(3, 50, 'Buruk\r\n');
 
 -- --------------------------------------------------------
 
@@ -176,7 +259,17 @@ INSERT INTO `tbl_pelanggaran` (`id_pelanggaran`, `kode_pelanggaran`, `induk_sisw
 (1, 'PSBK0001', '123', 'JPBK0002', '2021-06-09', 'berisik', 1),
 (2, 'PSBK0002', '999', 'JPBK0003', '2021-06-13', 'memakai gelang emas\r\n', 1),
 (3, 'PSBK0003', '123', 'JPBK0001', '2021-06-13', 'Terlambat 30 menit\r\n', 1),
-(4, 'PSBK0004', '123', 'JPBK0003', '2021-06-13', 'Menggunakan kalung emas\r\n', 1);
+(4, 'PSBK0004', '123', 'JPBK0003', '2021-06-13', 'Menggunakan kalung emas\r\n', 1),
+(5, 'PSBK0005', '121212121212121', 'JPBK0006', '2021-06-14', 'Baju tidak dimasukan', 0),
+(6, 'PSBK0006', '123', 'JPBK0007', '2021-06-14', 'curat coret pakaian seragam\r\n', 0),
+(7, 'PSBK0007', '999', 'JPBK0008', '2021-06-14', 'rambut digerai\r\n', 0),
+(8, 'PSBK0008', '123', 'JPBK0009', '2021-06-14', 'pakaian terlalu kecil', 0),
+(9, 'PSBK0009', '123', 'JPBK0009', '2021-06-14', 'celana pencil', 0),
+(10, 'PSBK0010', '123', 'JPBK0001', '2021-06-17', 'plo\r\n', 0),
+(11, 'PSBK0011', '54321', 'JPBK0009', '2021-06-17', 'xx', 0),
+(12, 'PSBK0012', '999', 'JPBK0009', '2021-06-17', 'xzzxc', 0),
+(17, 'PSBK0013', '999', 'JPBK0009', '2021-06-17', 'asdas', 0),
+(18, 'PSBK0014', '15555', 'JPBK0006', '2021-06-20', 'hjghghg', 1);
 
 -- --------------------------------------------------------
 
@@ -214,17 +307,20 @@ CREATE TABLE `tbl_siswa` (
   `foto_siswa` varchar(200) NOT NULL DEFAULT 'default-siswa.png',
   `id_kelas_siswa` int(3) NOT NULL,
   `poin_siswa` int(5) NOT NULL,
-  `status_sanksi_siswa` int(5) NOT NULL
+  `status_sanksi_siswa` int(5) NOT NULL,
+  `id_param_poin_siswa` int(5) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_siswa`
 --
 
-INSERT INTO `tbl_siswa` (`id_siswa`, `induk_siswa`, `nama_siswa`, `jk_siswa`, `alamat_siswa`, `foto_siswa`, `id_kelas_siswa`, `poin_siswa`, `status_sanksi_siswa`) VALUES
-(1, '121212121212121', 'testing2', 'Laki-laki', 'jalan ', 'default-siswa.png', 1, 0, 0),
-(2, '999', 're', 'Perempuan', 'ewrew', 'default-siswa.png', 1, 5, 2),
-(3, '123', 'siswa', 'Laki-laki', 'kacau\r\n', 'default-siswa.png', 1, 15, 2);
+INSERT INTO `tbl_siswa` (`id_siswa`, `induk_siswa`, `nama_siswa`, `jk_siswa`, `alamat_siswa`, `foto_siswa`, `id_kelas_siswa`, `poin_siswa`, `status_sanksi_siswa`, `id_param_poin_siswa`) VALUES
+(1, '121212121212121', 'testing2', 'Laki-laki', 'jalan ', 'default-siswa.png', 1, 10, 2, 1),
+(2, '999', 're', 'Perempuan', 'ewrew', 'default-siswa.png', 1, 45, 2, 2),
+(3, '123', 'siswaas', 'Perempuan', 'kacau\r\nasdasda', 'arashmil2.jpg', 2, 60, 2, 3),
+(4, '54321', 'qwert', 'Laki-laki', 'as', 'default-siswa.png', 2, 15, 2, 1),
+(5, '15555', 'contoh', 'Laki-laki', 'alamat', 'default-siswa.png', 2, 10, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -250,6 +346,12 @@ INSERT INTO `tbl_walimurid` (`id_walimurid`, `nama_walimurid`, `induk_siswa_wali
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_absensi`
+--
+ALTER TABLE `tbl_absensi`
+  ADD PRIMARY KEY (`id_absensi`);
 
 --
 -- Indexes for table `tbl_akun`
@@ -288,6 +390,18 @@ ALTER TABLE `tbl_kelas`
   ADD PRIMARY KEY (`id_kelas`);
 
 --
+-- Indexes for table `tbl_param_kehadiran`
+--
+ALTER TABLE `tbl_param_kehadiran`
+  ADD PRIMARY KEY (`id_param_kehadiran`);
+
+--
+-- Indexes for table `tbl_param_poin`
+--
+ALTER TABLE `tbl_param_poin`
+  ADD PRIMARY KEY (`id_param_poin`);
+
+--
 -- Indexes for table `tbl_pelanggaran`
 --
 ALTER TABLE `tbl_pelanggaran`
@@ -316,16 +430,22 @@ ALTER TABLE `tbl_walimurid`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_absensi`
+--
+ALTER TABLE `tbl_absensi`
+  MODIFY `id_absensi` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `tbl_akun`
 --
 ALTER TABLE `tbl_akun`
-  MODIFY `id_akun` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_akun` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tbl_catatan_kasus`
 --
 ALTER TABLE `tbl_catatan_kasus`
-  MODIFY `id_catatan_kasus` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_catatan_kasus` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_guru`
@@ -343,19 +463,31 @@ ALTER TABLE `tbl_jabatan`
 -- AUTO_INCREMENT for table `tbl_jenis_pelanggaran`
 --
 ALTER TABLE `tbl_jenis_pelanggaran`
-  MODIFY `id_jenis_pelanggaran` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_jenis_pelanggaran` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_kelas`
 --
 ALTER TABLE `tbl_kelas`
-  MODIFY `id_kelas` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kelas` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tbl_param_kehadiran`
+--
+ALTER TABLE `tbl_param_kehadiran`
+  MODIFY `id_param_kehadiran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbl_param_poin`
+--
+ALTER TABLE `tbl_param_poin`
+  MODIFY `id_param_poin` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_pelanggaran`
 --
 ALTER TABLE `tbl_pelanggaran`
-  MODIFY `id_pelanggaran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_pelanggaran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_sanksi`
@@ -367,7 +499,7 @@ ALTER TABLE `tbl_sanksi`
 -- AUTO_INCREMENT for table `tbl_siswa`
 --
 ALTER TABLE `tbl_siswa`
-  MODIFY `id_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_walimurid`

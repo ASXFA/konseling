@@ -14,7 +14,7 @@ class Catatan_kasus extends CI_Controller {
         $this->role = $this->session->userdata('role_user');
         
         $this->load->model('model_catatan_kasus');
-        if ($this->role == 1 || $this->role == 3) {
+        if ($this->role == 1 || $this->role == 2) {
             $this->load->model('model_guru');
             $data = $this->model_guru->getByInduk($this->induk);
             $this->id = $data->id_guru;
@@ -34,6 +34,11 @@ class Catatan_kasus extends CI_Controller {
                 'telp_user_login' => $this->telp,
                 'foto_user_login' => $this->foto
             );
+            if ($this->role == 2) {
+                $this->load->model('model_kelas');
+                $kelas = $this->model_kelas->getByIdGuru($this->id);
+                $this->content['id_kelas'] = $kelas->id_kelas;
+            }
         }else if($this->role == 3){
             $this->load->model('model_siswa');
             $data = $this->model_siswa->getByInduk($this->induk);
@@ -42,7 +47,11 @@ class Catatan_kasus extends CI_Controller {
             $this->jabatan = 'siswa';
             // $this->telp = $data->telp_guru;
             $this->alamat = $data->alamat_siswa;
-            $this->ortu = $data->ortu_siswa;
+            $this->id_kelas = $data->id_kelas_siswa;
+            $this->poin = $data->poin_siswa;
+            $this->status_sanksi = $data->status_sanksi_siswa;
+            $this->id_param_poin_siswa = $data->id_param_poin_siswa;
+            $this->foto = $data->foto_siswa;
             $this->content = array(
                 'base_url'=>base_url(),
                 'id_user' => $this->id,
@@ -51,7 +60,11 @@ class Catatan_kasus extends CI_Controller {
                 'role_user_login' => $this->role,
                 'jabatan_user_login' => $this->jabatan,
                 'alamat_user_login' => $this->alamat,
-                'ortu_user_login' => $this->ortu
+                'id_kelas_login' => $this->id_kelas,
+                'poin_user_login' => $this->poin,
+                'status_sanksi_login' => $this->status_sanksi,
+                'id_param_poin_login' => $this->id_param_poin_siswa,
+                'foto_user_login' => $this->foto
             );
         }
 	}
@@ -60,36 +73,96 @@ class Catatan_kasus extends CI_Controller {
 	{
         $this->load->model('model_pelanggaran');
         $this->load->model('model_siswa');
-        $this->content['siswa'] = $this->model_siswa->getAll()->result();
         $this->content['pelanggaran'] = $this->model_pelanggaran->getAll()->result();
+        if ($this->role == 1) {
+            $this->content['siswa'] = $this->model_siswa->getAll()->result();
+        }
+        if ($this->role == 2) {
+            $this->content['siswa'] = $this->model_siswa->getByIdKelas($this->content['id_kelas'])->result();
+        }
 		$this->twig->display('main/catatan.html',$this->content);
 	}
 
     public function catatanLists()
     {
+        $this->load->model('model_siswa');
         $this->load->model('model_pelanggaran');
         $catatan = $this->model_catatan_kasus->make_datatables();
         $data = array();
         if (!empty($catatan)) {
             $no = 1;
-            foreach($catatan as $row){
-                $sub_data = array();
-                $sub_data[] = $no;
-                $pelanggaran = $this->model_pelanggaran->getById($row->id_pelanggaran_catatan_kasus);
-                if (!empty($pelanggaran)) {
-                    $sub_data[] = $pelanggaran->kode_pelanggaran;
-                }else{
-                    $sub_data[] = "Pelanggaran Tidak Ada !";
+            if ($this->role == 1) {
+                foreach($catatan as $row){
+                    $sub_data = array();
+                    $sub_data[] = $no;
+                    $pelanggaran = $this->model_pelanggaran->getById($row->id_pelanggaran_catatan_kasus);
+                    if (!empty($pelanggaran)) {
+                        $sub_data[] = $pelanggaran->kode_pelanggaran;
+                    }else{
+                        $sub_data[] = "Pelanggaran Tidak Ada !";
+                    }
+                    $sub_data[] = $row->penyelesaian_catatan_kasus;
+                    $sub_data[] = $row->evaluasi_catatan_kasus;
+                    $sub_data[] = $row->tanggal_catatan_kasus;
+                    $sub_data[] = $row->pihak_catatan_kasus;
+                    $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailCatatan' id='".$row->id_catatan_kasus."' title='cek akun'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editCatatan' id='".$row->id_catatan_kasus."' title='Edit Catatan'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteCatatan' id='".$row->id_catatan_kasus."' title='Delete Catatan'><i class='fa fa-trash'></i></button><a href='".base_url()."cetakByKasus/".$row->id_catatan_kasus."' target='_blank' class='btn btn-success btn-sm mr-2 cetakCatatan' id='".$row->id_catatan_kasus."' title='Cetak Catatan Kasus'><i class='fa fa-print'></i></a>";
+                    $data[] = $sub_data;
+                    $no++;
                 }
-                $sub_data[] = $row->penyelesaian_catatan_kasus;
-                $sub_data[] = $row->evaluasi_catatan_kasus;
-                $sub_data[] = $row->tanggal_catatan_kasus;
-                $sub_data[] = $row->pihak_catatan_kasus;
-                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailCatatan' id='".$row->id_catatan_kasus."' title='cek akun'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editCatatan' id='".$row->id_catatan_kasus."' title='Edit Catatan'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteCatatan' id='".$row->id_catatan_kasus."' title='Delete Catatan'><i class='fa fa-trash'></i></button><a href='".base_url()."cetakByKasus/".$row->id_catatan_kasus."' target='_blank' class='btn btn-success btn-sm mr-2 cetakCatatan' id='".$row->id_catatan_kasus."' title='Cetak Catatan Kasus'><i class='fa fa-print'></i></a>";
-                $data[] = $sub_data;
-                $no++;
+            }
+            if($this->role == 2){
+                $siswa = $this->model_siswa->getByIdKelas($this->content['id_kelas'])->result();
+                $pelanggarann = $this->model_pelanggaran->getAll()->result();
+                foreach($siswa as $s){
+                    foreach($pelanggarann as $p){
+                        foreach($catatan as $row){
+                            if(($p->induk_siswa_pelanggaran == $s->induk_siswa)&&($row->id_pelanggaran_catatan_kasus == $p->id_pelanggaran)){
+                                $sub_data = array();
+                                $sub_data[] = $no;
+                                $pelanggaran = $this->model_pelanggaran->getById($row->id_pelanggaran_catatan_kasus);
+                                if (!empty($pelanggaran)) {
+                                    $sub_data[] = $pelanggaran->kode_pelanggaran;
+                                }else{
+                                    $sub_data[] = "Pelanggaran Tidak Ada !";
+                                }
+                                $sub_data[] = $row->penyelesaian_catatan_kasus;
+                                $sub_data[] = $row->evaluasi_catatan_kasus;
+                                $sub_data[] = $row->tanggal_catatan_kasus;
+                                $sub_data[] = $row->pihak_catatan_kasus;
+                                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailCatatan' id='".$row->id_catatan_kasus."' title='cek akun'><i class='fa fa-eye'></i></button><a href='".base_url()."cetakByKasus/".$row->id_catatan_kasus."' target='_blank' class='btn btn-success btn-sm mr-2 cetakCatatan' id='".$row->id_catatan_kasus."' title='Cetak Catatan Kasus'><i class='fa fa-print'></i></a>";
+                                $data[] = $sub_data;
+                                $no++;
+                            }
+                        }
+                    }
+                }
+            }
+            if($this->role == 3){
+                $pelanggarann = $this->model_pelanggaran->getAllByInduk($this->induk)->result();
+                foreach($pelanggarann as $p){
+                    foreach($catatan as $row){
+                        if($row->id_pelanggaran_catatan_kasus == $p->id_pelanggaran){
+                            $sub_data = array();
+                            $sub_data[] = $no;
+                            $pelanggaran = $this->model_pelanggaran->getById($row->id_pelanggaran_catatan_kasus);
+                            if (!empty($pelanggaran)) {
+                                $sub_data[] = $pelanggaran->kode_pelanggaran;
+                            }else{
+                                $sub_data[] = "Pelanggaran Tidak Ada !";
+                            }
+                            $sub_data[] = $row->penyelesaian_catatan_kasus;
+                            $sub_data[] = $row->evaluasi_catatan_kasus;
+                            $sub_data[] = $row->tanggal_catatan_kasus;
+                            $sub_data[] = $row->pihak_catatan_kasus;
+                            $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailCatatan' id='".$row->id_catatan_kasus."' title='cek akun'><i class='fa fa-eye'></i></button><a href='".base_url()."cetakByKasus/".$row->id_catatan_kasus."' target='_blank' class='btn btn-success btn-sm mr-2 cetakCatatan' id='".$row->id_catatan_kasus."' title='Cetak Catatan Kasus'><i class='fa fa-print'></i></a>";
+                            $data[] = $sub_data;
+                            $no++;
+                        }
+                    }
+                }
             }
         }
+            
         $output = array(
             'draw' => intval($_POST['draw']),
             'recordsTotal' => $this->model_catatan_kasus->get_all_data(),
@@ -302,7 +375,7 @@ class Catatan_kasus extends CI_Controller {
             $mpdf = new \Mpdf\Mpdf(['format' => 'A4-L']);
             $mpdf->WriteHTML($html);
             $mpdf->Output($filename,\Mpdf\Output\Destination::INLINE);
-        }else if($indk == "0" && (($bulan != "0" && $tahun == "0")||($bulan == "0" && $tahun != "0")||($bulan != "0" && $tahun != "0"))){
+        }else if($indk == "0"){
             $siswa = $this->model_siswa->getAll()->result();
             $pelanggaran = $this->model_pelanggaran->getAll()->result();
             $catatan = $this->model_catatan_kasus->getByTanggal($bulan,$tahun)->result();
@@ -320,6 +393,48 @@ class Catatan_kasus extends CI_Controller {
             $filename = "Laporan_Catatan_Kasus.pdf";
             ob_start();
             $this->twig->display('main/cetakByKategori.html',$this->content);
+            $html = ob_get_contents();
+            ob_end_clean();
+            require_once 'application/vendor/autoload.php'; 
+            $mpdf = new \Mpdf\Mpdf(['format' => 'A4-L']);
+            $mpdf->WriteHTML($html);
+            $mpdf->Output($filename,\Mpdf\Output\Destination::INLINE);
+        }else if($indk != "0"){
+            $siswa = $this->model_siswa->getByInduk($indk);
+            $this->content['induk_siswa'] = $siswa->induk_siswa;
+            $this->content['nama_siswa'] = $siswa->nama_siswa;
+            $this->content['jk_siswa'] = $siswa->jk_siswa;
+            $this->content['alamat_siswa'] = $siswa->alamat_siswa;
+            $this->content['poin_siswa'] = $siswa->poin_siswa;
+            $this->content['foto_siswa'] = $siswa->foto_siswa;
+            $sanksi = $this->model_sanksi->getById($siswa->status_sanksi_siswa);
+            if (!empty($sanksi)) {
+                $this->content['status_sanksi_siswa'] = $sanksi->nama_sanksi;
+            }else{
+                $this->content['status_sanksi_siswa'] = "-";
+            }
+            $kelas = $this->model_kelas->getById($siswa->id_kelas_siswa);
+            if (!empty($kelas)) {
+                $this->content['kelas_siswa'] = $kelas->nama_kelas;
+            }else{
+                $this->content['kelas_siswa'] = "-";
+    
+            }
+            $pelanggaran = $this->model_pelanggaran->getAllByInduk($indk)->result();
+            $catatan = $this->model_catatan_kasus->getByTanggal($bulan,$tahun)->result();
+            $jp = $this->model_jenis_pelanggaran->getAll()->result();
+            $sanksi = $this->model_sanksi->getAll();
+            $kelas = $this->model_kelas->getAll()->result();
+            $this->content['pelanggaran'] = $pelanggaran;
+            $this->content['catatan'] = $catatan;
+            $this->content['jp'] = $jp;
+            $this->content['sanksi'] = $sanksi;
+            $this->content['kelas'] = $kelas;
+            $this->content['nama_bulan'] = $nama_bulan;
+            $this->content['tahun'] = $tahun;
+            $filename = "Laporan_Catatan_Kasus.pdf";
+            ob_start();
+            $this->twig->display('main/cetakBySiswaKategori.html',$this->content);
             $html = ob_get_contents();
             ob_end_clean();
             require_once 'application/vendor/autoload.php'; 

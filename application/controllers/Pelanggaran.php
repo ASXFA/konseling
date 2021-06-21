@@ -14,7 +14,7 @@ class Pelanggaran extends CI_Controller {
         $this->role = $this->session->userdata('role_user');
         
         $this->load->model('model_pelanggaran');
-        if ($this->role == 1 || $this->role == 3) {
+        if ($this->role == 1 || $this->role == 2) {
             $this->load->model('model_guru');
             $data = $this->model_guru->getByInduk($this->induk);
             $this->id = $data->id_guru;
@@ -34,6 +34,11 @@ class Pelanggaran extends CI_Controller {
                 'telp_user_login' => $this->telp,
                 'foto_user_login' => $this->foto
             );
+            if ($this->role == 2) {
+                $this->load->model('model_kelas');
+                $kelas = $this->model_kelas->getByIdGuru($this->id);
+                $this->content['id_kelas'] = $kelas->id_kelas;
+            }
         }else if($this->role == 3){
             $this->load->model('model_siswa');
             $data = $this->model_siswa->getByInduk($this->induk);
@@ -42,7 +47,11 @@ class Pelanggaran extends CI_Controller {
             $this->jabatan = 'siswa';
             // $this->telp = $data->telp_guru;
             $this->alamat = $data->alamat_siswa;
-            $this->ortu = $data->ortu_siswa;
+            $this->id_kelas = $data->id_kelas_siswa;
+            $this->poin = $data->poin_siswa;
+            $this->status_sanksi = $data->status_sanksi_siswa;
+            $this->id_param_poin_siswa = $data->id_param_poin_siswa;
+            $this->foto = $data->foto_siswa;
             $this->content = array(
                 'base_url'=>base_url(),
                 'id_user' => $this->id,
@@ -51,7 +60,11 @@ class Pelanggaran extends CI_Controller {
                 'role_user_login' => $this->role,
                 'jabatan_user_login' => $this->jabatan,
                 'alamat_user_login' => $this->alamat,
-                'ortu_user_login' => $this->ortu
+                'id_kelas_login' => $this->id_kelas,
+                'poin_user_login' => $this->poin,
+                'status_sanksi_login' => $this->status_sanksi,
+                'id_param_poin_login' => $this->id_param_poin_siswa,
+                'foto_user_login' => $this->foto
             );
         }
 	}
@@ -96,16 +109,47 @@ class Pelanggaran extends CI_Controller {
         if (!empty($pelanggaran)) {
             $no = 1;
             foreach($pelanggaran as $row){
-                $sub_data = array();
-                $sub_data[] = $no;
-                $sub_data[] = $row->kode_pelanggaran;
-                $sub_data[] = $row->induk_siswa_pelanggaran;
-                $siswa = $this->model_siswa->getByInduk($row->induk_siswa_pelanggaran);
-                $sub_data[] = $siswa->nama_siswa;
-                $sub_data[] = date('d - m - Y',strtotime($row->tanggal_pelanggaran));
-                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailPelanggaran' id='".$row->id_pelanggaran."' title='Detail Pelanggaran'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editPelanggaran' id='".$row->id_pelanggaran."' title='Edit Pelanggaran'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deletePelanggaran' id='".$row->id_pelanggaran."' title='Delete Pelanggaran'><i class='fa fa-trash'></i></button>";
-                $data[] = $sub_data;
-                $no++;
+                if ($this->role == 1) {
+                    $sub_data = array();
+                    $sub_data[] = $no;
+                    $sub_data[] = $row->kode_pelanggaran;
+                    $sub_data[] = $row->induk_siswa_pelanggaran;
+                    $siswa = $this->model_siswa->getByInduk($row->induk_siswa_pelanggaran);
+                    $sub_data[] = $siswa->nama_siswa;
+                    $sub_data[] = date('d - m - Y',strtotime($row->tanggal_pelanggaran));
+                    $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailPelanggaran' id='".$row->id_pelanggaran."' title='Detail Pelanggaran'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editPelanggaran' id='".$row->id_pelanggaran."' title='Edit Pelanggaran'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deletePelanggaran' id='".$row->id_pelanggaran."' title='Delete Pelanggaran'><i class='fa fa-trash'></i></button>";
+                    $data[] = $sub_data;
+                    $no++;
+                }else if($this->role==2){
+                    $siswa = $this->model_siswa->getAll()->result();
+                    $sub_data = array();
+                    foreach($siswa as $s){
+                        if ($row->induk_siswa_pelanggaran == $s->induk_siswa) {
+                            if($s->id_kelas_siswa == $this->content['id_kelas']){
+                                $sub_data[] = $no;
+                                $sub_data[] = $row->kode_pelanggaran;
+                                $sub_data[] = $row->induk_siswa_pelanggaran;
+                                $sub_data[] = $s->nama_siswa;
+                                $sub_data[] = date('d - m - Y',strtotime($row->tanggal_pelanggaran));
+                                $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailPelanggaran' id='".$row->id_pelanggaran."' title='Detail Pelanggaran'><i class='fa fa-eye'></i></button>";
+                                $data[] = $sub_data;
+                                $no++;
+                            }
+                        }
+                    }
+                }else if($this->role == 3){
+                    $sub_data = array();
+                    if ($row->induk_siswa_pelanggaran == $this->induk) {
+                        $sub_data[] = $no;
+                        $sub_data[] = $row->kode_pelanggaran;
+                        $sub_data[] = $row->induk_siswa_pelanggaran;
+                        $sub_data[] = $this->nama;
+                        $sub_data[] = date('d - m - Y',strtotime($row->tanggal_pelanggaran));
+                        $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailPelanggaran' id='".$row->id_pelanggaran."' title='Detail Pelanggaran'><i class='fa fa-eye'></i></button>";
+                        $data[] = $sub_data;
+                        $no++;
+                    }
+                }
             }
         }
         $output = array(

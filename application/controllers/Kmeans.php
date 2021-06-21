@@ -167,7 +167,7 @@ class Kmeans extends CI_Controller {
                 $hasil2 = sqrt((pow($s->id_param_poin_siswa - $c2x,2)) + pow($s->id_param_kehadiran_absensi - $c2y,2));
                 $hasil3 = sqrt((pow($s->id_param_poin_siswa - $c3x,2)) + pow($s->id_param_kehadiran_absensi - $c3y,2));
 
-                if (($hasil1 < $hasil2)&&($hasil1 < $hasil3)) {
+                if ((($hasil1 < $hasil2)&&($hasil1 < $hasil3))||(($hasil1 == $hasil2)&&($hasil1 < $hasil3))||(($hasil1 < $hasil2)&&($hasil1 == $hasil3))) {
                     $hasilC1x += $s->id_param_poin_siswa;
                     $hasilC1y += $s->id_param_kehadiran_absensi;
                     $jmlhdata1 += 1;
@@ -176,7 +176,7 @@ class Kmeans extends CI_Controller {
                     }else if($i != 0){
                         array_push($semuaCluster2,1);
                     }
-                }else if(($hasil2 < $hasil1)&&($hasil2 < $hasil3)){
+                }else if((($hasil2 < $hasil1)&&($hasil2 < $hasil3))||(($hasil2 == $hasil1)&&($hasil2 < $hasil3))||(($hasil2 < $hasil1)&&($hasil2 == $hasil3))){
                     $hasilC2x += $s->id_param_poin_siswa;
                     $hasilC2y += $s->id_param_kehadiran_absensi;
                     $jmlhdata2 += 1;
@@ -185,7 +185,7 @@ class Kmeans extends CI_Controller {
                     }else if($i != 0){
                         array_push($semuaCluster2,2);
                     }
-                }else if(($hasil3 < $hasil2)&&($hasil3 < $hasil1)){
+                }else if((($hasil3 < $hasil2)&&($hasil3 < $hasil1))||(($hasil3 == $hasil2)&&($hasil3 < $hasil1))||(($hasil3 < $hasil2)&&($hasil3 == $hasil1))){
                     $hasilC3x += $s->id_param_poin_siswa;
                     $hasilC3y += $s->id_param_kehadiran_absensi;
                     $jmlhdata3 += 1;
@@ -271,9 +271,17 @@ class Kmeans extends CI_Controller {
                 'induk_siswa' => $siswa2[$i]['induk_siswa'],
                 'nama_siswa' => $siswa2[$i]['nama_siswa'],
                 'poin_siswa' => $siswa2[$i]['poin_siswa'],
-                'nilai_absensi' => $siswa2[$i]['nilai_absensi'],
-                'hasil_kmeans' => $semuaCluster1[$i]
+                'nilai_absensi' => $siswa2[$i]['nilai_absensi']
             );
+            if (!empty($semuaCluster2)) {
+                if (isset($semuaCluster2[$i])) {
+                    $data['hasil_kmeans'] = $semuaCluster2[$i];
+                }
+            }else{
+                if (isset($semuaCluster1[$i])) {
+                    $data['hasil_kmeans'] = $semuaCluster1[$i];
+                }
+            }
             array_push($hasil,$data);
         }
         $this->content['hasill'] = $hasil;

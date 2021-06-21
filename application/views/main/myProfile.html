@@ -31,7 +31,7 @@
                                             {% if role_user_login != 3 %}
                                             <img src="{{base_url}}assets/img-profil/guru/{{foto_user_login}}" id="imgView" style="width:200px !important;" class="card-img-top img-thumbnail">
                                             {% else %}
-                                            <img src="{{base_url}}assets/img-profil/siswa/{{foto_user_login}}" id="imgView" width="10px" class="card-img-top img-thumbnail">
+                                            <img src="{{base_url}}assets/img-profil/siswa/{{foto_user_login}}" id="imgView" style="width:200px !important;" class="card-img-top img-thumbnail">
                                             {% endif %}
                                         </div>
                                         <div class="custom-file mt-2">
@@ -141,8 +141,7 @@
                                     <label for="" class="form-control-label">Telepon </label>
                                     <input type="text" name="telp_user_edit" id="telp_user_edit" class="form-control" required>
                                 </div>
-                                {% endif %}
-                                {% if role_user_login == 3 %}
+                                {% elseif role_user_login == 3 %}
                                 <div class="form-group">
                                     <label for="" class="form-control-label">Jenis Kelamin </label>
                                     <select name="jk_user_edit" id="jk_user_edit" class="form-control" required>
@@ -152,7 +151,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="form-control-label">Alamat</label>
-                                    <textarea cols="3" rows="3" name="alamat_user_edit" id="alamat_user_edit" class="form-control" required>
+                                    <textarea cols="3" rows="3" name="alamat_user_edit" id="alamat_user_edit" class="form-control" required></textarea>
                                 </div>
                                 {% endif %}
                                 <div class="form-group">
