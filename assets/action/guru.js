@@ -143,4 +143,42 @@ $(function(){
         })
     })
 
+    $(document).on('click','.detailGuru',function(){
+        var induk = $(this).attr('id');
+        $('#modal-detail-guru').modal({backdrop:'static',show:true});
+        $('#exampleModalLabelDetail').html('Detail Guru');
+        $.ajax({
+            method:'POST',
+            dataType:'JSON',
+            data:{induk:induk},
+            url:'guruByInduk',
+            success:function(result){
+                var html = "";
+                html +="<table class='table table-borderd'>";
+                html += "<tr>";
+                html += "<td rowspan='8'><img class='img-thumbnail' src='"+base_url+"assets/img-profil/guru/"+result.foto_guru+"'></td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Induk guru </td>";
+                html += "<td>"+result.induk_guru+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Nama guru </td>";
+                html += "<td>"+result.nama_guru+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Jabatan Guru </td>";
+                html += "<td>"+result.jabatan_guru+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td>Telpon</td>";
+                html += "<td>"+result.telp_guru+"</td>";
+                html += "</tr>";
+                html += "</table>";
+
+                $('#table-detail-guru').html(html);
+            }
+        })
+    })
+
 })

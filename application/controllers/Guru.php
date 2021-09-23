@@ -1,18 +1,19 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Guru extends CI_Controller {
+class Guru extends CI_Controller
+{
 
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
         $this->isLogin = $this->session->userdata('isLogin');
         if ($this->isLogin == 0) {
             redirect(base_url('auth'));
         }
         $this->induk = $this->session->userdata('induk_user');
         $this->role = $this->session->userdata('role_user');
-        
+
         $this->load->model('model_guru');
         if ($this->role == 1 || $this->role == 3) {
             $this->load->model('model_guru');
@@ -25,7 +26,7 @@ class Guru extends CI_Controller {
             $this->jabatan = $jabatan->nama_jabatan;
             $this->telp = $data->telp_guru;
             $this->content = array(
-                'base_url'=>base_url(),
+                'base_url' => base_url(),
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'role_user_login' => $this->role,
@@ -34,7 +35,7 @@ class Guru extends CI_Controller {
                 'telp_user_login' => $this->telp,
                 'foto_user_login' => $this->foto
             );
-        }else if($this->role == 3){
+        } else if ($this->role == 3) {
             $this->load->model('model_siswa');
             $data = $this->model_siswa->getByInduk($this->induk);
             $this->id = $data->id_siswa;
@@ -44,7 +45,7 @@ class Guru extends CI_Controller {
             $this->alamat = $data->alamat_siswa;
             $this->ortu = $data->ortu_siswa;
             $this->content = array(
-                'base_url'=>base_url(),
+                'base_url' => base_url(),
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'nama_user_login' => $this->nama,
@@ -54,12 +55,12 @@ class Guru extends CI_Controller {
                 'ortu_user_login' => $this->ortu
             );
         }
-	}
+    }
 
-	public function listGuru()
-	{
-		$this->twig->display('main/guru.html',$this->content);
-	}
+    public function listGuru()
+    {
+        $this->twig->display('main/guru.html', $this->content);
+    }
 
     public function guruLists()
     {
@@ -67,7 +68,7 @@ class Guru extends CI_Controller {
         $data = array();
         if (!empty($guru)) {
             $no = 1;
-            foreach($guru as $row){
+            foreach ($guru as $row) {
                 if ($this->induk != $row->induk_guru) {
                     $sub_data = array();
                     $sub_data[] = $no;
@@ -75,7 +76,7 @@ class Guru extends CI_Controller {
                     $sub_data[] = $row->nama_guru;
                     $sub_data[] = $row->jabatan_guru;
                     $sub_data[] = $row->telp_guru;
-                    $sub_data[] = "<button class='btn btn-info btn-sm mr-2 cekAkun' id='".$row->induk_guru."' title='cek akun'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editGuru' id='".$row->induk_guru."' title='Edit Guru'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteGuru' id='".$row->induk_guru."' title='Delete Guru'><i class='fa fa-trash'></i></button>";
+                    $sub_data[] = "<button class='btn btn-info btn-sm mr-2 detailGuru' id='" . $row->induk_guru . "' title='cek akun'><i class='fa fa-eye'></i></button><button class='btn btn-warning btn-sm mr-2 editGuru' id='" . $row->induk_guru . "' title='Edit Guru'><i class='fa fa-edit'></i></button><button class='btn btn-danger btn-sm mr-2 deleteGuru' id='" . $row->induk_guru . "' title='Delete Guru'><i class='fa fa-trash'></i></button>";
                     $data[] = $sub_data;
                     $no++;
                 }
@@ -100,7 +101,8 @@ class Guru extends CI_Controller {
             'induk_guru' => $guru->induk_guru,
             'nama_guru' => $guru->nama_guru,
             'jabatan_guru' => $guru->jabatan_guru,
-            'telp_guru' => $guru->telp_guru
+            'telp_guru' => $guru->telp_guru,
+            'foto_guru' => $guru->foto_guru
         );
         echo json_encode($output);
     }
@@ -120,28 +122,28 @@ class Guru extends CI_Controller {
             );
             $data2 = array(
                 'username_akun' => $this->input->post('induk_guru'),
-                'password_akun' => password_hash($this->input->post('induk_guru'),PASSWORD_DEFAULT),
+                'password_akun' => password_hash($this->input->post('induk_guru'), PASSWORD_DEFAULT),
                 'induk_akun' => $this->input->post('induk_guru'),
                 'role_akun' => $this->input->post('jabatan_guru'),
                 'status_akun' => 0
             );
             $process1 = $this->model_guru->tambahguru($data);
             $process2 = $this->model_akun->tambahAkun($data2);
-        }else if($operation == 'edit'){
+        } else if ($operation == 'edit') {
             $data = array(
                 'induk_guru' => $this->input->post('induk_guru'),
                 'nama_guru' => $this->input->post('nama_guru'),
                 'jabatan_guru' => $this->input->post('jabatan_guru'),
                 'telp_guru' => $this->input->post('telp_guru')
             );
-            $process1 = $this->model_guru->editGuru($data,$id);
+            $process1 = $this->model_guru->editGuru($data, $id);
             $data2 = array('induk_akun' => $this->input->post('induk_guru'));
-            $process2 = $this->model_akun->editAkun($data2,$this->input->post('old_induk'));
+            $process2 = $this->model_akun->editAkun($data2, $this->input->post('old_induk'));
         }
         if ($process1 && $process2) {
             $pesan['cond'] = '1';
             $pesan['msg'] = 'Berhasil !';
-        }else {
+        } else {
             $pesan['cond'] = '0';
             $pesan['msg'] = 'Gagal !';
         }
@@ -167,12 +169,12 @@ class Guru extends CI_Controller {
         $this->load->library('upload', $config);
         $operation = $this->input->post('operation');
         $pesan = array();
-        if ( ! $this->upload->do_upload('inputFile')){
+        if (!$this->upload->do_upload('inputFile')) {
             $error = array('error' => $this->upload->display_errors());
             if ($operation == "Tambah") {
                 $data = array(
                     'nama_objek' => $this->input->post('nama_objek'),
-                    'link_rute_objek'=> $this->input->post('link_rute_objek'),
+                    'link_rute_objek' => $this->input->post('link_rute_objek'),
                     'harga_objek' => $this->input->post('harga_objek'),
                     'waktu_objek' => $this->input->post('waktu_objek'),
                     'popularitas_objek' => $this->input->post('popularitas_objek'),
@@ -183,12 +185,12 @@ class Guru extends CI_Controller {
                     'created_by' => $this->nama
                 );
                 $process = $this->model_objek_wisata->tambahObjek($data);
-                $pesan = array('id_objek'=>$process,'cond'=>1);
-            }else{
+                $pesan = array('id_objek' => $process, 'cond' => 1);
+            } else {
                 $id = $this->input->post('id_objek');
                 $data = array(
                     'nama_objek' => $this->input->post('nama_objek'),
-                    'link_rute_objek'=> $this->input->post('link_rute_objek'),
+                    'link_rute_objek' => $this->input->post('link_rute_objek'),
                     'harga_objek' => $this->input->post('harga_objek'),
                     'waktu_objek' => $this->input->post('waktu_objek'),
                     'popularitas_objek' => $this->input->post('popularitas_objek'),
@@ -198,17 +200,17 @@ class Guru extends CI_Controller {
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => $this->nama
                 );
-                $process = $this->model_objek_wisata->editObjek($id,$data);
-                $pesan = array('cond'=>2,'asup'=>$error);
+                $process = $this->model_objek_wisata->editObjek($id, $data);
+                $pesan = array('cond' => 2, 'asup' => $error);
             }
-        }else{
-            $foto = array('upload_data'=> $this->upload->data());
+        } else {
+            $foto = array('upload_data' => $this->upload->data());
             $image = $foto['upload_data']['file_name'];
 
             if ($operation == "Tambah") {
                 $data = array(
                     'nama_objek' => $this->input->post('nama_objek'),
-                    'link_rute_objek'=> $this->input->post('link_rute_objek'),
+                    'link_rute_objek' => $this->input->post('link_rute_objek'),
                     'harga_objek' => $this->input->post('harga_objek'),
                     'waktu_objek' => $this->input->post('waktu_objek'),
                     'popularitas_objek' => $this->input->post('popularitas_objek'),
@@ -219,12 +221,12 @@ class Guru extends CI_Controller {
                     'created_by' => $this->nama
                 );
                 $process = $this->model_objek_wisata->tambahObjek($data);
-                $pesan = array('id_objek'=>$process,'cond'=>1);
-            }else{
+                $pesan = array('id_objek' => $process, 'cond' => 1);
+            } else {
                 $id = $this->input->post('id_objek');
                 $data = array(
                     'nama_objek' => $this->input->post('nama_objek'),
-                    'link_rute_objek'=> $this->input->post('link_rute_objek'),
+                    'link_rute_objek' => $this->input->post('link_rute_objek'),
                     'harga_objek' => $this->input->post('harga_objek'),
                     'waktu_objek' => $this->input->post('waktu_objek'),
                     'popularitas_objek' => $this->input->post('popularitas_objek'),
@@ -235,8 +237,8 @@ class Guru extends CI_Controller {
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => $this->nama
                 );
-                $process = $this->model_objek_wisata->editObjek($id,$data);
-                $pesan = array('cond'=>2,'asup'=>'bener da');
+                $process = $this->model_objek_wisata->editObjek($id, $data);
+                $pesan = array('cond' => 2, 'asup' => 'bener da');
             }
         }
         echo json_encode($pesan);

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -71,4 +71,3 @@ $route['^(listSanksi|sanksiLists|sanksiById|doSanksi|deleteSanksi)(/:any)?$'] = 
 $route['^(listAbsensi|absensiLists|absensiById|doAbsensi|deleteAbsensi)(/:any)?$'] = 'Absensi/$0';
 $route['^(listPelanggaran|pelanggaranLists|pelanggaranById|doPelanggaran|detailPelanggaran|deletePelanggaran|getKodePelanggaran)(/:any)?$'] = 'Pelanggaran/$0';
 $route['^(listCatatan|catatanLists|catatanById|doCatatan|deleteCatatan|detailCatatan|cetakByKasus|cetakByKategori)(/:any)?$'] = 'Catatan_kasus/$0';
-
