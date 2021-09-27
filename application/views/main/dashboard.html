@@ -12,7 +12,7 @@
                     {% if role_user_login == 3 %}
                     <div class="col-md-6">
                         <h1 class="display-4 text-white text-right">Poin BK Anda : {{poin_user_login}} Poin</h1>
-                        <h3 class="float-right text-warning">Sanksi : 
+                        <h3 class="float-right text-warning">Sanksi :
                             {% for s in sanksi %}
                             {% if s.id_sanksi == status_sanksi_login %}
                             {{s.nama_sanksi}}
@@ -116,7 +116,7 @@
                             <h4 class="card-title">Pelanggaran yang belum dimasukan kedalam catatan kasus</h4>
                         </div>
                         <div class="card-body">
-                            <table id="table-pel" class="display table table-striped table-hover" >
+                            <table id="table-pel" class="display table table-striped table-hover">
                                 <thead class="bg-primary text-white">
                                     <th>Kode Pelanggaran</th>
                                     <th>Induk Siswa</th>
@@ -167,7 +167,7 @@
                             <h5 class="card-title">Pelanggaran Terbaru</h5>
                         </div>
                         <div class="card-body">
-                            <table id="table-pel" class="display table table-striped table-hover" >
+                            <table id="table-pel" class="display table table-striped table-hover">
                                 <thead class="bg-primary text-white">
                                     <th>Kode Pelanggaran</th>
                                     <th>Induk Siswa</th>
@@ -180,25 +180,25 @@
                                 <tbody>
                                     {% set tgl = "now"|date('Y-m-d') %}
                                     {% for p in pelanggaran %}
-                                        {% if tgl == p.tanggal_pelanggaran %}
-                                        {% for s in siswa %}
-                                            {% if s.induk_siswa == p.induk_siswa_pelanggaran %}
-                                                <tr>
-                                                    <td>{{p.kode_pelanggaran}}</td>
-                                                    <td>{{p.induk_siswa_pelanggaran}}</td>
-                                                    <td>{{s.nama_siswa}}</td>
-                                                    {% for jp in jp_table %}
-                                                    {% if jp.kode_pelanggaran == p.kode_jenis_pel_pelanggaran %}
-                                                    <td>{{jp.nama_jenis_pelanggaran}}</td>
-                                                    <td>{{jp.poin_pelanggaran}}</td>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                    <td>{{p.keterangan_pelanggaran}}</td>
-                                                    <td>{{p.tanggal_pelanggaran}}</td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
+                                    {% if tgl == p.tanggal_pelanggaran %}
+                                    {% for s in siswa %}
+                                    {% if s.induk_siswa == p.induk_siswa_pelanggaran %}
+                                    <tr>
+                                        <td>{{p.kode_pelanggaran}}</td>
+                                        <td>{{p.induk_siswa_pelanggaran}}</td>
+                                        <td>{{s.nama_siswa}}</td>
+                                        {% for jp in jp_table %}
+                                        {% if jp.kode_pelanggaran == p.kode_jenis_pel_pelanggaran %}
+                                        <td>{{jp.nama_jenis_pelanggaran}}</td>
+                                        <td>{{jp.poin_pelanggaran}}</td>
                                         {% endif %}
+                                        {% endfor %}
+                                        <td>{{p.keterangan_pelanggaran}}</td>
+                                        <td>{{p.tanggal_pelanggaran}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -215,35 +215,33 @@
                             <h5 class="card-title">Pelanggaran Terbaru Hari ini</h5>
                         </div>
                         <div class="card-body">
-                            <table id="table-pel" class="display table table-striped table-hover" >
+                            <table id="table-pel" class="display table table-striped table-hover">
                                 <thead class="bg-primary text-white">
                                     <th>Kode Pelanggaran</th>
-                                    <th>Induk Siswa</th>
-                                    <th>Nama Siswa</th>
                                     <th>Nama Pelanggaran</th>
                                     <th>Poin</th>
                                     <th>Keterangan</th>
                                     <th>Tanggal</th>
                                 </thead>
                                 <tbody>
+                                    {% if pelanggaran is empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center"> Tidak ada pelanggaran baru </td>
+                                    </tr>
+                                    {% else %}
                                     {% set tgl = "now"|date('Y-m-d') %}
                                     {% for p in pelanggaran %}
-                                        {% if tgl == p.tanggal_pelanggaran %}
-                                            <tr>
-                                                <td>{{p.kode_pelanggaran}}</td>
-                                                <td>{{p.induk_siswa_pelanggaran}}</td>
-                                                <td>{{s.nama_siswa}}</td>
-                                                {% for jp in jp_table %}
-                                                {% if jp.kode_pelanggaran == p.kode_jenis_pel_pelanggaran %}
-                                                <td>{{jp.nama_jenis_pelanggaran}}</td>
-                                                <td>{{jp.poin_pelanggaran}}</td>
-                                                {% endif %}
-                                                {% endfor %}
-                                                <td>{{p.keterangan_pelanggaran}}</td>
-                                                <td>{{p.tanggal_pelanggaran}}</td>
-                                            </tr>
-                                        {% endif %}
+                                    {% if tgl == p.tanggal_pelanggaran %}
+                                    <tr>
+                                        <td>{{p.kode_pelanggaran}}</td>
+                                        <td>{{p.nama_jenis_pelanggaran}}</td>
+                                        <td>{{p.poin_jenis_pelanggaran}}</td>
+                                        <td>{{p.keterangan_pelanggaran}}</td>
+                                        <td>{{p.tanggal_pelanggaran}}</td>
+                                    </tr>
+                                    {% endif %}
                                     {% endfor %}
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -253,7 +251,7 @@
             {% endif %}
         </div>
     </div>
-{% endblock %}
-{% block js %}
-<script src="{{base_url}}assets/action/dashboard.js"></script>
-{% endblock %}
+    {% endblock %}
+    {% block js %}
+    <script src="{{base_url}}assets/action/dashboard.js"></script>
+    {% endblock %}

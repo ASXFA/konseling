@@ -1,18 +1,19 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Dashboard extends CI_Controller
+{
 
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
         $this->isLogin = $this->session->userdata('isLogin');
         if ($this->isLogin == 0) {
             redirect(base_url('auth'));
         }
         $this->induk = $this->session->userdata('induk_user');
         $this->role = $this->session->userdata('role_user');
-        
+
         // $this->load->model('model_walimurid');
         if ($this->role == 1 || $this->role == 2) {
             $this->load->model('model_guru');
@@ -25,7 +26,7 @@ class Dashboard extends CI_Controller {
             $this->jabatan = $jabatan->nama_jabatan;
             $this->telp = $data->telp_guru;
             $this->content = array(
-                'base_url'=>base_url(),
+                'base_url' => base_url(),
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'role_user_login' => $this->role,
@@ -39,8 +40,7 @@ class Dashboard extends CI_Controller {
                 $kelas = $this->model_kelas->getByIdGuru($this->id);
                 $this->content['id_kelas'] = $kelas->id_kelas;
             }
-
-        }else if($this->role == 3){
+        } else if ($this->role == 3) {
             $this->load->model('model_siswa');
             $data = $this->model_siswa->getByInduk($this->induk);
             $this->id = $data->id_siswa;
@@ -54,7 +54,7 @@ class Dashboard extends CI_Controller {
             $this->id_param_poin_siswa = $data->id_param_poin_siswa;
             $this->foto = $data->foto_siswa;
             $this->content = array(
-                'base_url'=>base_url(),
+                'base_url' => base_url(),
                 'id_user' => $this->id,
                 'induk_user_login' => $this->induk,
                 'nama_user_login' => $this->nama,
@@ -68,10 +68,10 @@ class Dashboard extends CI_Controller {
                 'foto_user_login' => $this->foto
             );
         }
-	}
+    }
 
-	public function index()
-	{
+    public function index()
+    {
         $this->load->model('model_siswa');
         $this->load->model('model_pelanggaran');
         $this->load->model('model_jenis_pelanggaran');
@@ -83,7 +83,7 @@ class Dashboard extends CI_Controller {
             $this->content['pelanggaran_table'] = $this->model_pelanggaran->getAllByStatus(0)->result();
             $this->content['siswa_table'] = $this->model_siswa->getAll()->result();
             $this->content['jp_table'] = $this->model_jenis_pelanggaran->getAll()->result();
-        }else if($this->role == 2){
+        } else if ($this->role == 2) {
             $this->content['siswa'] = $this->model_siswa->getByIdKelas($this->content['id_kelas'])->result();
             $this->content['pelanggaran'] = $this->model_pelanggaran->getAll()->result();
             $this->content['catatan'] = $this->model_catatan_kasus->getAll()->result();
@@ -92,31 +92,31 @@ class Dashboard extends CI_Controller {
             $pelanggaran = $this->model_pelanggaran->getAll()->result();
             $catatan = $this->model_catatan_kasus->getAll()->result();
             $arrP = array();
-            foreach($pelanggaran as $p){
-                foreach($siswa as $s){
+            foreach ($pelanggaran as $p) {
+                foreach ($siswa as $s) {
                     if ($s->induk_siswa == $p->induk_siswa_pelanggaran) {
-                        array_push($arrP,$p->id_pelanggaran);
+                        array_push($arrP, $p->id_pelanggaran);
                     }
                 }
             }
             $arrC = array();
-            foreach($catatan as $c){
-                for($i=0; $i<count($arrP); $i++){
+            foreach ($catatan as $c) {
+                for ($i = 0; $i < count($arrP); $i++) {
                     if ($arrP[$i] == $c->id_pelanggaran_catatan_kasus) {
-                        array_push($arrC,$c->id_catatan_kasus);
+                        array_push($arrC, $c->id_catatan_kasus);
                     }
                 }
             }
             $this->content['hasilP'] = $arrP;
             $this->content['hasilC'] = $arrC;
-        }else if($this->role == 3){
+        } else if ($this->role == 3) {
             $this->load->model('model_sanksi');
             $this->content['jp_table'] = $this->model_jenis_pelanggaran->getAll()->result();
-            $this->content['pelanggaran'] = $this->model_pelanggaran->getAllByInduk($this->induk)->result();
+            $this->content['pelanggaran'] = $this->model_pelanggaran->getDashSiswa($this->induk);
             $this->content['sanksi'] = $this->model_sanksi->getAll();
         }
-		$this->twig->display('main/dashboard.html',$this->content);
-	}
+        $this->twig->display('main/dashboard.html', $this->content);
+    }
 
     public function myProfile()
     {
@@ -134,7 +134,7 @@ class Dashboard extends CI_Controller {
             $this->content['jabatan_user'] = "-";
             $akun = $this->model_akun->getByInduk($siswa->induk_siswa);
             $this->content['username_user'] = $akun->username_akun;
-        }else{
+        } else {
             $this->load->model('model_guru');
             $this->load->model('model_jabatan');
             $this->load->model('model_akun');
@@ -147,7 +147,7 @@ class Dashboard extends CI_Controller {
             $akun = $this->model_akun->getByInduk($guru->induk_guru);
             $this->content['username_user'] = $akun->username_akun;
         }
-        $this->twig->display('main/myProfile.html',$this->content);
+        $this->twig->display('main/myProfile.html', $this->content);
     }
 
     public function editProfil()
@@ -161,21 +161,21 @@ class Dashboard extends CI_Controller {
                 'alamat_siswa' => $this->input->post('alamat_user_edit'),
             );
             $data2 = array('username_akun' => $this->input->post('username_user_edit'));
-            $process = $this->model_siswa->editByIndukSiswa($data,$induk);
-            $process2 = $this->model_akun->editAkun($data2,$induk);
-        }else{
+            $process = $this->model_siswa->editByIndukSiswa($data, $induk);
+            $process2 = $this->model_akun->editAkun($data2, $induk);
+        } else {
             $data = array(
                 'nama_guru' => $this->input->post('nama_user_edit'),
                 'telp_guru' => $this->input->post('telp_user_edit')
             );
             $data2 = array('username_akun' => $this->input->post('username_user_edit'));
-            $process = $this->model_guru->editGuruByInduk($data,$induk);
-            $process2 = $this->model_akun->editAkun($data2,$induk);
+            $process = $this->model_guru->editGuruByInduk($data, $induk);
+            $process2 = $this->model_akun->editAkun($data2, $induk);
         }
         if ($process && $process2) {
-            $output=array('cond'=>'1');
-        }else{
-            $output=array('cond'=>'0');
+            $output = array('cond' => '1');
+        } else {
+            $output = array('cond' => '0');
         }
         echo json_encode($output);
     }
@@ -185,34 +185,34 @@ class Dashboard extends CI_Controller {
         $induk = $this->input->post('induk_user_foto');
         if ($this->role != 3) {
             $config['upload_path']          = './assets/img-profil/guru/';
-        }else{
+        } else {
             $config['upload_path']          = './assets/img-profil/siswa/';
         }
         $config['allowed_types']        = 'gif|jpg|png|jpeg';
         $this->load->library('upload', $config);
         $operation = $this->input->post('operation');
         $pesan = array();
-        if ( ! $this->upload->do_upload('inputFile')){
+        if (!$this->upload->do_upload('inputFile')) {
             $error = array('error' => $this->upload->display_errors());
             $pesan['cond'] = '0';
             $pesan['msg'] = $error;
-        }else{
-            $foto = array('upload_data'=> $this->upload->data());
+        } else {
+            $foto = array('upload_data' => $this->upload->data());
             $image = $foto['upload_data']['file_name'];
-            if($this->role != 3){
+            if ($this->role != 3) {
                 $this->load->model('model_guru');
-                $data = array('foto_guru'=>$image);
-                $process = $this->model_guru->editGuruByInduk($data,$induk);
-            }else{
+                $data = array('foto_guru' => $image);
+                $process = $this->model_guru->editGuruByInduk($data, $induk);
+            } else {
                 $this->load->model('model_siswa');
-                $data = array('foto_siswa'=>$image);
-                $process = $this->model_siswa->editByIndukSiswa($data,$induk);
+                $data = array('foto_siswa' => $image);
+                $process = $this->model_siswa->editByIndukSiswa($data, $induk);
             }
         }
         if ($process) {
             $pesan['cond'] = '1';
             $pesan['msg'] = 'Berhasil !';
-        }else{
+        } else {
             $pesan['cond'] = '0';
             $pesan['msg'] = 'Gagal !';
         }
